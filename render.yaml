@@ -1,0 +1,57 @@
+# render.yaml — Infrastructure as Code para FastInventory SaaS
+# Referencia: https://render.com/docs/blueprint-spec
+
+services:
+  # ── Web Service (API FastInventory) ──────────────────────────────────────────
+  - type: web
+    name: fastinventory-api
+    runtime: docker         # Usa nuestro Dockerfile existente
+    dockerfilePath: ./Dockerfile
+    region: oregon          # us-west-2 (más cercano a América Latina)
+    plan: free              # Cambiar a "starter" ($7/mes) para producción real
+
+    # Release Command: corre las migraciones ANTES de que arranque el servidor.
+    # Si alembic upgrade head falla → el deploy se cancela (protección).
+    releaseCommand: "alembic upgrade head"
+
+    envVars:
+      # Variables conectadas a los servicios gestionados de Render
+      - key: DATABASE_URL
+        fromDatabase:
+          name: fastinventory-db
+          property: connectionString
+
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: fastinventory-redis
+          property: connectionString
+
+      # Variables de entorno a configurar manualmente en el panel de Render
+      - key: SECRET_KEY
+        sync: false         # Valor sensible: se ingresa en el panel, NO en este archivo
+
+      - key: ENVIRONMENT
+        value: production
+
+      - key: DEBUG
+        value: "false"
+
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "60"
+
+      - key: CORS_ORIGINS
+        value: '["*"]'      # Ajustar con el dominio real en producción
+
+  # ── PostgreSQL 14 (Managed Database) ─────────────────────────────────────────
+databases:
+  - name: fastinventory-db
+    plan: free              # 1 GB de almacenamiento, región oregon
+    databaseName: fastinventory_db
+    user: fastinventory_user
+
+  # ── Redis 7 (Key-Value Store) ─────────────────────────────────────────────────
+  - type: redis
+    name: fastinventory-redis
+    plan: free              # 25 MB — suficiente para demo. Upstash para producción real.
+    ipAllowList: []         # Solo accesible desde servicios de Render (más seguro)
