@@ -10,9 +10,7 @@ services:
     region: oregon          # us-west-2 (más cercano a América Latina)
     plan: free              # Cambiar a "starter" ($7/mes) para producción real
 
-    # Release Command: corre las migraciones ANTES de que arranque el servidor.
-    # Si alembic upgrade head falla → el deploy se cancela (protección).
-    releaseCommand: "alembic upgrade head"
+    # El Release Command fue movido al Dockerfile para mayor compatibilidad
 
     envVars:
       # Variables conectadas a los servicios gestionados de Render

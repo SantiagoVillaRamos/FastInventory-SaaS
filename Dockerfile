@@ -17,5 +17,5 @@ COPY . .
 # Exponer el puerto de la API
 EXPOSE 8000
 
-# Producción: Gunicorn gestiona workers Uvicorn (dev: se sobreescribe en docker-compose.yml)
-CMD ["gunicorn", "app.main:app", "--workers", "2", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000", "--timeout", "60"]
+# Producción: ejecutar migraciones y luego iniciar Gunicorn/Uvicorn
+CMD ["sh", "-c", "alembic upgrade head && gunicorn app.main:app --workers 2 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000 --timeout 60"]
