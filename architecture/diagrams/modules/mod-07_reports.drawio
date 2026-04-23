@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile>
+  <diagram name="Clases - reports/" id="cls_rep">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="ttl" value="Módulo reports/ — Diagrama de Clases" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=15;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="150" y="10" width="800" height="35" as="geometry"/></mxCell>
+
+        <!-- ReportService -->
+        <mxCell id="S1" value="ReportService (service.py)" style="swimlane;fontStyle=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1"><mxGeometry x="20" y="60" width="350" height="220" as="geometry"/></mxCell>
+        <mxCell id="S1div" value="" style="line;strokeColor=#6c8ebf;" vertex="1" parent="S1"><mxGeometry y="30" width="350" height="10" as="geometry"/></mxCell>
+        <mxCell id="S1a" value="+ get_daily_report(tenant, date, session): ReportRead" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="40" width="350" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1b" value="+ get_biweekly_report(tenant, session): ReportRead" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="62" width="350" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1c" value="+ get_monthly_report(tenant, session): ReportRead" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="84" width="350" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1d" value="+ generate_daily_pdf(tenant, date, session): StreamingResponse" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;fontStyle=1;" vertex="1" parent="S1"><mxGeometry y="106" width="350" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1n1" value="▸ Validación de plan ANTES de ejecutar query SQL" style="text;strokeColor=none;fillColor=#fff2cc;align=left;spacingLeft=8;fontSize=10;fontStyle=2;" vertex="1" parent="S1"><mxGeometry y="140" width="350" height="20" as="geometry"/></mxCell>
+        <mxCell id="S1n2" value="▸ Sin repository.py propio → usa SaleRepository" style="text;strokeColor=none;fillColor=#fff2cc;align=left;spacingLeft=8;fontSize=10;fontStyle=2;" vertex="1" parent="S1"><mxGeometry y="160" width="350" height="20" as="geometry"/></mxCell>
+        <mxCell id="S1n3" value="▸ PDF: FPDF2 en memoria → StreamingResponse (CA-06)" style="text;strokeColor=none;fillColor=#fff2cc;align=left;spacingLeft=8;fontSize=10;fontStyle=2;" vertex="1" parent="S1"><mxGeometry y="180" width="350" height="20" as="geometry"/></mxCell>
+
+        <!-- ReportRead schema -->
+        <mxCell id="SC1" value="«schema» ReportRead" style="swimlane;fontStyle=3;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1"><mxGeometry x="430" y="60" width="250" height="160" as="geometry"/></mxCell>
+        <mxCell id="SC1div" value="" style="line;strokeColor=#d6b656;" vertex="1" parent="SC1"><mxGeometry y="30" width="250" height="10" as="geometry"/></mxCell>
+        <mxCell id="SC1a" value="+ period_start: date" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="SC1"><mxGeometry y="40" width="250" height="22" as="geometry"/></mxCell>
+        <mxCell id="SC1b" value="+ period_end: date" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="SC1"><mxGeometry y="62" width="250" height="22" as="geometry"/></mxCell>
+        <mxCell id="SC1c" value="+ total: Decimal" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="SC1"><mxGeometry y="84" width="250" height="22" as="geometry"/></mxCell>
+        <mxCell id="SC1d" value="+ total_sales: int" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="SC1"><mxGeometry y="106" width="250" height="22" as="geometry"/></mxCell>
+        <mxCell id="SC1e" value="+ items: list[ReportItemRead]" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="SC1"><mxGeometry y="128" width="250" height="22" as="geometry"/></mxCell>
+
+        <!-- FPDF2 external -->
+        <mxCell id="FP" value="«external lib» FPDF2" style="swimlane;fontStyle=3;startSize=30;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1"><mxGeometry x="740" y="60" width="200" height="130" as="geometry"/></mxCell>
+        <mxCell id="FPdiv" value="" style="line;strokeColor=#9673a6;" vertex="1" parent="FP"><mxGeometry y="30" width="200" height="10" as="geometry"/></mxCell>
+        <mxCell id="FPa" value="+ add_page()" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="FP"><mxGeometry y="40" width="200" height="22" as="geometry"/></mxCell>
+        <mxCell id="FPb" value="+ cell(text)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="FP"><mxGeometry y="62" width="200" height="22" as="geometry"/></mxCell>
+        <mxCell id="FPc" value="+ output() → bytes" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;fontStyle=1;" vertex="1" parent="FP"><mxGeometry y="84" width="200" height="22" as="geometry"/></mxCell>
+        <mxCell id="FPn" value="0 escrituras en disco (ADR-05)" style="text;strokeColor=none;fillColor=#fffacd;align=center;fontSize=10;fontStyle=2;" vertex="1" parent="FP"><mxGeometry y="108" width="200" height="16" as="geometry"/></mxCell>
+
+        <!-- Plan validator -->
+        <mxCell id="PV" value="«helper» PlanValidator" style="swimlane;fontStyle=3;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1"><mxGeometry x="430" y="260" width="250" height="90" as="geometry"/></mxCell>
+        <mxCell id="PVdiv" value="" style="line;strokeColor=#d6b656;" vertex="1" parent="PV"><mxGeometry y="30" width="250" height="10" as="geometry"/></mxCell>
+        <mxCell id="PVa" value="+ check_plan(tenant_plan, required): bool" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="PV"><mxGeometry y="40" width="250" height="22" as="geometry"/></mxCell>
+        <mxCell id="PVn" value="HTTP 403 si plan no permite el reporte" style="text;strokeColor=none;fillColor=#fffacd;align=center;fontSize=10;fontStyle=2;" vertex="1" parent="PV"><mxGeometry y="62" width="250" height="22" as="geometry"/></mxCell>
+
+        <!-- Access table -->
+        <mxCell id="acc" value="Plan vs. Reportes disponibles" style="swimlane;fontStyle=1;startSize=30;fillColor=#f5f5f5;strokeColor=#666;fontSize=12;" vertex="1" parent="1"><mxGeometry x="740" y="240" width="300" height="130" as="geometry"/></mxCell>
+        <mxCell id="acc1" value="free  → solo /reports/daily (JSON)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="acc"><mxGeometry y="30" width="300" height="25" as="geometry"/></mxCell>
+        <mxCell id="acc2" value="basic → daily + biweekly + monthly (JSON)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="acc"><mxGeometry y="55" width="300" height="25" as="geometry"/></mxCell>
+        <mxCell id="acc3" value="pro   → todos los anteriores + PDF" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;fontStyle=1;" vertex="1" parent="acc"><mxGeometry y="80" width="300" height="25" as="geometry"/></mxCell>
+        <mxCell id="acc4" value="Nombre en PDF = tenant.name (no env var)" style="text;strokeColor=none;fillColor=#fffacd;align=center;fontSize=10;fontStyle=2;" vertex="1" parent="acc"><mxGeometry y="105" width="300" height="20" as="geometry"/></mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="A1" value="usa" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" source="S1" target="FP" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="A2" value="retorna" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" source="S1" target="SC1" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="A3" value="valida" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" source="S1" target="PV" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Secuencia - Generar PDF (Plan Pro)" id="seq_rep">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" pageWidth="1400" pageHeight="720">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="ttl" value="reports/ — Secuencia: Generar PDF Reporte Diario — Plan Pro (GET /reports/daily/pdf)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=14;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="80" y="10" width="1200" height="35" as="geometry"/></mxCell>
+
+        <mxCell id="P0" value="Admin" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="20" y="55" width="90" height="40" as="geometry"/></mxCell>
+        <mxCell id="P1" value="Router" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="185" y="55" width="100" height="40" as="geometry"/></mxCell>
+        <mxCell id="P2" value="ReportService" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="365" y="55" width="110" height="40" as="geometry"/></mxCell>
+        <mxCell id="P3" value="SaleRepository" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="565" y="55" width="110" height="40" as="geometry"/></mxCell>
+        <mxCell id="P4" value="PostgreSQL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="780" y="55" width="110" height="40" as="geometry"/></mxCell>
+        <mxCell id="P5" value="FPDF2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="1000" y="55" width="90" height="40" as="geometry"/></mxCell>
+
+        <!-- Lifelines -->
+        <mxCell id="L0" style="endArrow=none;dashed=1;html=1;strokeColor=#666;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="65" y="95" as="sourcePoint"/><mxPoint x="65" y="690" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L1" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="235" y="95" as="sourcePoint"/><mxPoint x="235" y="690" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L2" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="420" y="95" as="sourcePoint"/><mxPoint x="420" y="690" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L3" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="620" y="95" as="sourcePoint"/><mxPoint x="620" y="690" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L4" style="endArrow=none;dashed=1;html=1;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="835" y="95" as="sourcePoint"/><mxPoint x="835" y="690" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L5" style="endArrow=none;dashed=1;html=1;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1045" y="95" as="sourcePoint"/><mxPoint x="1045" y="690" as="targetPoint"/></mxGeometry></mxCell>
+
+        <mxCell id="m1" value="1. GET /reports/daily/pdf?date=2026-04-11" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="65" y="130" as="sourcePoint"/><mxPoint x="235" y="130" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m2" value="2. require_admin + get_current_tenant" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="235" y="165" as="sourcePoint"/><mxPoint x="420" y="165" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m3" value="3. generate_daily_pdf(Tenant{plan=PRO}, date)" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="235" y="195" as="sourcePoint"/><mxPoint x="420" y="195" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m4" value="4. check_plan(PRO, required=PRO) → True" style="endArrow=block;endFill=1;html=1;fontSize=10;fontStyle=2;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="420" y="225" as="sourcePoint"/><mxPoint x="420" y="225" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="alt" value="Si plan != PRO → HTTP 403 'PDF no disponible en su plan'" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="450" y="215" width="340" height="28" as="geometry"/></mxCell>
+        <mxCell id="m5" value="5. list(tenant_id, from=date, to=date)" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="420" y="260" as="sourcePoint"/><mxPoint x="620" y="260" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m6" value="6. SELECT sales + items WHERE tenant_id=:id AND DATE=:date" style="endArrow=block;endFill=1;html=1;fontSize=10;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="620" y="290" as="sourcePoint"/><mxPoint x="835" y="290" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m7" value="7. [Sale con SaleItems]" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="835" y="320" as="sourcePoint"/><mxPoint x="620" y="320" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m8" value="8. [Sale]" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="620" y="350" as="sourcePoint"/><mxPoint x="420" y="350" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m9" value="9. Construir ReportRead (calcular totales)" style="endArrow=block;endFill=1;html=1;fontSize=10;fontStyle=2;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="420" y="380" as="sourcePoint"/><mxPoint x="420" y="380" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m10" value="10. Crear PDF en memoria con encabezado tenant.name" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="420" y="415" as="sourcePoint"/><mxPoint x="1045" y="415" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m11" value="11. add_page() + cell() datos de ventas + output()" style="endArrow=block;endFill=1;html=1;fontSize=10;fontStyle=2;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1045" y="445" as="sourcePoint"/><mxPoint x="1045" y="445" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m12" value="12. bytes PDF (sin escritura en disco)" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1045" y="480" as="sourcePoint"/><mxPoint x="420" y="480" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m13" value="13. StreamingResponse(bytes, filename=reporte_{slug}_{date}.pdf)" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="420" y="520" as="sourcePoint"/><mxPoint x="235" y="520" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m14" value="14. HTTP 200 — descarga PDF (Content-Disposition: attachment)" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;fontStyle=1;strokeColor=#82b366;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="235" y="560" as="sourcePoint"/><mxPoint x="65" y="560" as="targetPoint"/></mxGeometry></mxCell>
+
+        <mxCell id="note" value="ADR-05: tenant.name viene de Tenant object (BD)&#xa;NO de variable de entorno BUSINESS_NAME" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="1150" y="380" width="200" height="65" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

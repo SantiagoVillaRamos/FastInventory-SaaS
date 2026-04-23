@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+  <root>
+    <mxCell id="0"/><mxCell id="1" parent="0"/>
+
+    <!-- Título -->
+    <mxCell id="2" value="Casos de Uso — FastInventory SaaS v2.0" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=18;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="300" y="10" width="1000" height="40" as="geometry"/></mxCell>
+
+    <!-- System Boundary -->
+    <mxCell id="3" value="Sistema FastInventory SaaS v2.0" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666;verticalAlign=top;fontSize=13;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="200" y="60" width="1080" height="1060" as="geometry"/></mxCell>
+
+    <!-- ACTORES -->
+    <mxCell id="10" value="Empleado" style="shape=mxgraph.uml.actor;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="50" y="150" width="50" height="90" as="geometry"/></mxCell>
+    <mxCell id="11" value="Admin del Negocio" style="shape=mxgraph.uml.actor;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="50" y="480" width="50" height="90" as="geometry"/></mxCell>
+    <mxCell id="12" value="Nuevo Negocio" style="shape=mxgraph.uml.actor;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="50" y="880" width="50" height="90" as="geometry"/></mxCell>
+    <mxCell id="13" value="Super-Admin de Plataforma" style="shape=mxgraph.uml.actor;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="1490" y="430" width="50" height="90" as="geometry"/></mxCell>
+
+    <!-- USE CASES: Compartidos (Empleado + Admin) -->
+    <mxCell id="20" value="Iniciar Sesión" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="240" y="140" width="200" height="55" as="geometry"/></mxCell>
+    <mxCell id="21" value="Buscar Productos" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="240" y="230" width="200" height="55" as="geometry"/></mxCell>
+    <mxCell id="22" value="Registrar Venta (POS)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="240" y="320" width="200" height="55" as="geometry"/></mxCell>
+
+    <!-- USE CASES: Solo Admin del Negocio -->
+    <mxCell id="30" value="CRUD Productos y Categorías" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="560" y="140" width="220" height="55" as="geometry"/></mxCell>
+    <mxCell id="31" value="Ver Reporte Diario" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="560" y="230" width="220" height="55" as="geometry"/></mxCell>
+    <mxCell id="32" value="Exportar Reporte en PDF" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="560" y="320" width="220" height="55" as="geometry"/></mxCell>
+    <mxCell id="33" value="Ver Reportes Quincenal / Mensual" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="560" y="410" width="220" height="55" as="geometry"/></mxCell>
+    <mxCell id="34" value="Gestionar Usuarios del Negocio" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="560" y="500" width="220" height="55" as="geometry"/></mxCell>
+    <mxCell id="35" value="Ver y Editar Perfil del Negocio" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="560" y="590" width="220" height="55" as="geometry"/></mxCell>
+    <mxCell id="36" value="Consultar Plan y Límites de Uso" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="560" y="680" width="220" height="55" as="geometry"/></mxCell>
+
+    <!-- USE CASE: Onboarding (público) -->
+    <mxCell id="37" value="Onboarding: Registro Autónomo del Negocio (POST /auth/register)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="330" y="920" width="260" height="65" as="geometry"/></mxCell>
+
+    <!-- USE CASES: Solo Super-Admin -->
+    <mxCell id="40" value="Listar Todos los Tenants" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="900" y="230" width="220" height="55" as="geometry"/></mxCell>
+    <mxCell id="41" value="Suspender / Reactivar Tenant" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="900" y="330" width="220" height="55" as="geometry"/></mxCell>
+    <mxCell id="42" value="Cambiar Plan de un Tenant" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="900" y="430" width="220" height="55" as="geometry"/></mxCell>
+    <mxCell id="43" value="Ver Métricas Globales de Plataforma" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="900" y="530" width="220" height="55" as="geometry"/></mxCell>
+
+    <!-- EDGES: Empleado -->
+    <mxCell id="e1" style="endArrow=none;html=1;" edge="1" source="10" target="20" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e2" style="endArrow=none;html=1;" edge="1" source="10" target="21" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e3" style="endArrow=none;html=1;" edge="1" source="10" target="22" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- EDGES: Admin del Negocio -->
+    <mxCell id="e4" style="endArrow=none;html=1;" edge="1" source="11" target="20" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e5" style="endArrow=none;html=1;" edge="1" source="11" target="21" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e6" style="endArrow=none;html=1;" edge="1" source="11" target="22" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e7" style="endArrow=none;html=1;" edge="1" source="11" target="30" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e8" style="endArrow=none;html=1;" edge="1" source="11" target="31" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e9" style="endArrow=none;html=1;" edge="1" source="11" target="32" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e10" style="endArrow=none;html=1;" edge="1" source="11" target="33" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e11" style="endArrow=none;html=1;" edge="1" source="11" target="34" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e12" style="endArrow=none;html=1;" edge="1" source="11" target="35" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e13" style="endArrow=none;html=1;" edge="1" source="11" target="36" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e14" style="endArrow=none;html=1;" edge="1" source="11" target="37" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- EDGES: Nuevo Negocio -->
+    <mxCell id="e15" style="endArrow=none;html=1;" edge="1" source="12" target="37" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- EDGES: Super-Admin -->
+    <mxCell id="e16" style="endArrow=none;html=1;" edge="1" source="13" target="20" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e17" style="endArrow=none;html=1;" edge="1" source="13" target="40" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e18" style="endArrow=none;html=1;" edge="1" source="13" target="41" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e19" style="endArrow=none;html=1;" edge="1" source="13" target="42" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e20" style="endArrow=none;html=1;" edge="1" source="13" target="43" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- include / extend -->
+    <mxCell id="e21" value="&lt;&lt;include&gt;&gt;" style="endArrow=open;dashed=1;endFill=0;html=1;" edge="1" source="22" target="21" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e22" value="&lt;&lt;extend&gt;&gt;" style="endArrow=open;dashed=1;endFill=0;html=1;" edge="1" source="32" target="31" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+  </root>
+</mxGraphModel>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile>
+  <diagram name="Clases - products/" id="cls_prod">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="ttl" value="Módulo products/ — Diagrama de Clases" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=15;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="150" y="10" width="800" height="35" as="geometry"/></mxCell>
+
+        <!-- Product Model -->
+        <mxCell id="M1" value="«entity» Product (models.py)" style="swimlane;fontStyle=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1"><mxGeometry x="20" y="60" width="270" height="255" as="geometry"/></mxCell>
+        <mxCell id="M1div" value="" style="line;strokeColor=#82b366;" vertex="1" parent="M1"><mxGeometry y="30" width="270" height="10" as="geometry"/></mxCell>
+        <mxCell id="M1a" value="+ id: UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="M1"><mxGeometry y="40" width="270" height="22" as="geometry"/></mxCell>
+        <mxCell id="M1b" value="+ tenant_id: UUID (FK→tenants)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;fontStyle=1;" vertex="1" parent="M1"><mxGeometry y="62" width="270" height="22" as="geometry"/></mxCell>
+        <mxCell id="M1c" value="+ category_id: UUID (FK→categories)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="M1"><mxGeometry y="84" width="270" height="22" as="geometry"/></mxCell>
+        <mxCell id="M1d" value="+ name: VARCHAR(200)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="M1"><mxGeometry y="106" width="270" height="22" as="geometry"/></mxCell>
+        <mxCell id="M1e" value="+ description: TEXT" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="M1"><mxGeometry y="128" width="270" height="22" as="geometry"/></mxCell>
+        <mxCell id="M1f" value="+ price: DECIMAL(10,2)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="M1"><mxGeometry y="150" width="270" height="22" as="geometry"/></mxCell>
+        <mxCell id="M1g" value="+ stock: INTEGER" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;fontStyle=1;" vertex="1" parent="M1"><mxGeometry y="172" width="270" height="22" as="geometry"/></mxCell>
+        <mxCell id="M1h" value="+ unit: VARCHAR(50)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="M1"><mxGeometry y="194" width="270" height="22" as="geometry"/></mxCell>
+        <mxCell id="M1n" value="Índice: (tenant_id, name) para búsqueda predictiva" style="text;strokeColor=none;fillColor=#fffacd;align=center;fontSize=10;fontStyle=2;" vertex="1" parent="M1"><mxGeometry y="222" width="270" height="25" as="geometry"/></mxCell>
+
+        <!-- ProductService -->
+        <mxCell id="S1" value="ProductService (service.py)" style="swimlane;fontStyle=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1"><mxGeometry x="340" y="60" width="310" height="185" as="geometry"/></mxCell>
+        <mxCell id="S1div" value="" style="line;strokeColor=#6c8ebf;" vertex="1" parent="S1"><mxGeometry y="30" width="310" height="10" as="geometry"/></mxCell>
+        <mxCell id="S1a" value="+ create(tenant, data, session, cache): ProductRead" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="40" width="310" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1b" value="+ list(tenant_id, search, category_id, session, cache)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="62" width="310" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1c" value="+ get(tenant_id, product_id, session)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="84" width="310" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1d" value="+ update(tenant_id, product_id, data, session, cache)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="106" width="310" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1e" value="+ delete(tenant_id, product_id, session, cache)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="128" width="310" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1n" value="create() verifica límite: Free≤50, Basic≤500 productos" style="text;strokeColor=none;fillColor=#fffacd;align=center;fontSize=10;fontStyle=2;" vertex="1" parent="S1"><mxGeometry y="157" width="310" height="20" as="geometry"/></mxCell>
+
+        <!-- ProductRepository -->
+        <mxCell id="R1" value="ProductRepository (repository.py)" style="swimlane;fontStyle=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1"><mxGeometry x="700" y="60" width="350" height="255" as="geometry"/></mxCell>
+        <mxCell id="R1div" value="" style="line;strokeColor=#6c8ebf;" vertex="1" parent="R1"><mxGeometry y="30" width="350" height="10" as="geometry"/></mxCell>
+        <mxCell id="R1a" value="+ list_cached(tenant_id, search, category_id, cache)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="R1"><mxGeometry y="40" width="350" height="22" as="geometry"/></mxCell>
+        <mxCell id="R1b" value="+ invalidate_cache(tenant_id, cache)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="R1"><mxGeometry y="62" width="350" height="22" as="geometry"/></mxCell>
+        <mxCell id="R1c" value="+ create(data, session): Product" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="R1"><mxGeometry y="84" width="350" height="22" as="geometry"/></mxCell>
+        <mxCell id="R1d" value="+ get_by_id(tenant_id, product_id, session): Product|None" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="R1"><mxGeometry y="106" width="350" height="22" as="geometry"/></mxCell>
+        <mxCell id="R1e" value="+ count(tenant_id, session): int" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="R1"><mxGeometry y="128" width="350" height="22" as="geometry"/></mxCell>
+        <mxCell id="R1f" value="+ decrement_stock(tenant_id, product_id, qty, session)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;fontStyle=1;fillColor=#f8cecc;" vertex="1" parent="R1"><mxGeometry y="150" width="350" height="22" as="geometry"/></mxCell>
+        <mxCell id="R1n" value="⚡ decrement_stock() usado por SaleService dentro de su TX&#xa;Caché: tenant:{id}:products TTL=60s" style="text;strokeColor=none;fillColor=#f8cecc;align=center;fontSize=10;fontStyle=2;" vertex="1" parent="R1"><mxGeometry y="185" width="350" height="55" as="geometry"/></mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="A1" value="usa" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" source="S1" target="R1" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="A2" value="gestiona" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" source="R1" target="M1" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="A3" value="usa en TX →" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;strokeColor=#b85450;" edge="1" source="S1" target="R1f" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Secuencia - Búsqueda POS" id="seq_prod">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" pageWidth="1400" pageHeight="600">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="ttl" value="products/ — Secuencia: Búsqueda Predictiva en POS (GET /products/?search=X)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=14;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="80" y="10" width="1200" height="35" as="geometry"/></mxCell>
+
+        <mxCell id="P0" value="Empleado" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="20" y="55" width="100" height="40" as="geometry"/></mxCell>
+        <mxCell id="P1" value="Router" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="185" y="55" width="100" height="40" as="geometry"/></mxCell>
+        <mxCell id="P2" value="ProductService" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="360" y="55" width="110" height="40" as="geometry"/></mxCell>
+        <mxCell id="P3" value="ProductRepo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="550" y="55" width="110" height="40" as="geometry"/></mxCell>
+        <mxCell id="P4" value="Redis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="760" y="55" width="100" height="40" as="geometry"/></mxCell>
+        <mxCell id="P5" value="PostgreSQL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="970" y="55" width="110" height="40" as="geometry"/></mxCell>
+
+        <!-- Lifelines -->
+        <mxCell id="L0" style="endArrow=none;dashed=1;html=1;strokeColor=#666;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="70" y="95" as="sourcePoint"/><mxPoint x="70" y="570" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L1" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="235" y="95" as="sourcePoint"/><mxPoint x="235" y="570" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L2" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="415" y="95" as="sourcePoint"/><mxPoint x="415" y="570" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L3" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="605" y="95" as="sourcePoint"/><mxPoint x="605" y="570" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L4" style="endArrow=none;dashed=1;html=1;strokeColor=#b85450;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="810" y="95" as="sourcePoint"/><mxPoint x="810" y="570" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L5" style="endArrow=none;dashed=1;html=1;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1025" y="95" as="sourcePoint"/><mxPoint x="1025" y="570" as="targetPoint"/></mxGeometry></mxCell>
+
+        <mxCell id="m1" value="1. GET /products/?search=coca" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="70" y="130" as="sourcePoint"/><mxPoint x="235" y="130" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m2" value="2. list(tenant_id, search='coca', ...)" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="235" y="165" as="sourcePoint"/><mxPoint x="415" y="165" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m3" value="3. list_cached(tenant_id, 'coca', cache, session)" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="415" y="200" as="sourcePoint"/><mxPoint x="605" y="200" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m4" value="4. GET tenant:{tenant_id}:products" style="endArrow=block;endFill=1;html=1;fontSize=10;strokeColor=#b85450;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="605" y="235" as="sourcePoint"/><mxPoint x="810" y="235" as="targetPoint"/></mxGeometry></mxCell>
+
+        <mxCell id="hit_label" value="CACHE HIT" style="rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="860" y="225" width="120" height="25" as="geometry"/></mxCell>
+        <mxCell id="m5a" value="5a. [JSON productos] → filtrar en memoria" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;strokeColor=#82b366;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="810" y="265" as="sourcePoint"/><mxPoint x="605" y="265" as="targetPoint"/></mxGeometry></mxCell>
+
+        <mxCell id="miss_label" value="CACHE MISS" style="rounded=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="860" y="295" width="120" height="25" as="geometry"/></mxCell>
+        <mxCell id="m5b" value="5b. null" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;strokeColor=#b85450;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="810" y="330" as="sourcePoint"/><mxPoint x="605" y="330" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m6" value="6. SELECT WHERE tenant_id=:id AND name ILIKE '%coca%'" style="endArrow=block;endFill=1;html=1;fontSize=10;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="605" y="365" as="sourcePoint"/><mxPoint x="1025" y="365" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="db_note" value="Usa índice compuesto (tenant_id, name)" style="text;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="1050" y="355" width="250" height="20" as="geometry"/></mxCell>
+        <mxCell id="m7" value="7. [Product]" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1025" y="395" as="sourcePoint"/><mxPoint x="605" y="395" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m8" value="8. SET tenant:{id}:products [JSON] EX 60" style="endArrow=block;endFill=1;html=1;fontSize=10;strokeColor=#b85450;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="605" y="425" as="sourcePoint"/><mxPoint x="810" y="425" as="targetPoint"/></mxGeometry></mxCell>
+
+        <mxCell id="m9" value="9. [ProductRead] (filtrados)" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="415" y="465" as="sourcePoint"/><mxPoint x="235" y="465" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m10" value="10. HTTP 200 [{id, nombre, stock, precio}]" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;fontStyle=1;strokeColor=#82b366;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="235" y="500" as="sourcePoint"/><mxPoint x="70" y="500" as="targetPoint"/></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

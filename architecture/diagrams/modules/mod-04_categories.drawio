@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile>
+  <diagram name="Clases - categories/" id="cls_cat">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="ttl" value="Módulo categories/ — Diagrama de Clases" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=15;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="150" y="10" width="800" height="35" as="geometry"/></mxCell>
+
+        <!-- Category Model -->
+        <mxCell id="M1" value="«entity» Category (models.py)" style="swimlane;fontStyle=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1"><mxGeometry x="20" y="60" width="270" height="165" as="geometry"/></mxCell>
+        <mxCell id="M1div" value="" style="line;strokeColor=#82b366;" vertex="1" parent="M1"><mxGeometry y="30" width="270" height="10" as="geometry"/></mxCell>
+        <mxCell id="M1a" value="+ id: UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="M1"><mxGeometry y="40" width="270" height="22" as="geometry"/></mxCell>
+        <mxCell id="M1b" value="+ tenant_id: UUID (FK→tenants)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;fontStyle=1;" vertex="1" parent="M1"><mxGeometry y="62" width="270" height="22" as="geometry"/></mxCell>
+        <mxCell id="M1c" value="+ name: VARCHAR(100)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="M1"><mxGeometry y="84" width="270" height="22" as="geometry"/></mxCell>
+        <mxCell id="M1d" value="+ description: TEXT" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="M1"><mxGeometry y="106" width="270" height="22" as="geometry"/></mxCell>
+        <mxCell id="M1n" value="🔒 tenant_id en WHERE — siempre" style="text;strokeColor=none;fillColor=#fffacd;align=center;fontSize=10;fontStyle=2;" vertex="1" parent="M1"><mxGeometry y="135" width="270" height="22" as="geometry"/></mxCell>
+
+        <!-- CategoryService -->
+        <mxCell id="S1" value="CategoryService (service.py)" style="swimlane;fontStyle=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1"><mxGeometry x="340" y="60" width="300" height="175" as="geometry"/></mxCell>
+        <mxCell id="S1div" value="" style="line;strokeColor=#6c8ebf;" vertex="1" parent="S1"><mxGeometry y="30" width="300" height="10" as="geometry"/></mxCell>
+        <mxCell id="S1a" value="+ create(tenant_id, data, session, cache)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="40" width="300" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1b" value="+ list(tenant_id, session, cache)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="62" width="300" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1c" value="+ get(tenant_id, cat_id, session)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="84" width="300" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1d" value="+ update(tenant_id, cat_id, data, session, cache)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="106" width="300" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1e" value="+ delete(tenant_id, cat_id, session, cache)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="128" width="300" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1n" value="📦 Invalida caché Redis tras write operations" style="text;strokeColor=none;fillColor=#fffacd;align=center;fontSize=10;fontStyle=2;" vertex="1" parent="S1"><mxGeometry y="154" width="300" height="14" as="geometry"/></mxCell>
+
+        <!-- CategoryRepository -->
+        <mxCell id="R1" value="CategoryRepository (repository.py)" style="swimlane;fontStyle=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1"><mxGeometry x="700" y="60" width="330" height="220" as="geometry"/></mxCell>
+        <mxCell id="R1div" value="" style="line;strokeColor=#6c8ebf;" vertex="1" parent="R1"><mxGeometry y="30" width="330" height="10" as="geometry"/></mxCell>
+        <mxCell id="R1a" value="+ list_cached(tenant_id, cache, session): [Category]" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="R1"><mxGeometry y="40" width="330" height="22" as="geometry"/></mxCell>
+        <mxCell id="R1b" value="+ invalidate_cache(tenant_id, cache)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="R1"><mxGeometry y="62" width="330" height="22" as="geometry"/></mxCell>
+        <mxCell id="R1c" value="+ create(data, session): Category" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="R1"><mxGeometry y="84" width="330" height="22" as="geometry"/></mxCell>
+        <mxCell id="R1d" value="+ update(tenant_id, cat_id, data, session)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="R1"><mxGeometry y="106" width="330" height="22" as="geometry"/></mxCell>
+        <mxCell id="R1e" value="+ delete(tenant_id, cat_id, session)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="R1"><mxGeometry y="128" width="330" height="22" as="geometry"/></mxCell>
+        <mxCell id="R1f" value="+ has_products(tenant_id, cat_id, session): bool" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="R1"><mxGeometry y="150" width="330" height="22" as="geometry"/></mxCell>
+        <mxCell id="R1n" value="⚡ Caché: tenant:{id}:categories TTL=60s (ADR-07)&#xa;Fallback: consulta PostgreSQL si Redis no disponible" style="text;strokeColor=none;fillColor=#f8cecc;align=center;fontSize=10;fontStyle=2;" vertex="1" parent="R1"><mxGeometry y="180" width="330" height="30" as="geometry"/></mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="A1" value="usa" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" source="S1" target="R1" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="A2" value="gestiona" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" source="R1" target="M1" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Secuencia - Listar con Caché" id="seq_cat">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" pageWidth="1400" pageHeight="650">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="ttl" value="categories/ — Secuencia: Listar Categorías con Caché Redis (GET /categories/)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=14;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="80" y="10" width="1200" height="35" as="geometry"/></mxCell>
+
+        <mxCell id="P0" value="Usuario" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="20" y="55" width="100" height="40" as="geometry"/></mxCell>
+        <mxCell id="P1" value="Router" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="185" y="55" width="100" height="40" as="geometry"/></mxCell>
+        <mxCell id="P2" value="CategoryService" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="360" y="55" width="120" height="40" as="geometry"/></mxCell>
+        <mxCell id="P3" value="CategoryRepo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="560" y="55" width="110" height="40" as="geometry"/></mxCell>
+        <mxCell id="P4" value="Redis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="770" y="55" width="100" height="40" as="geometry"/></mxCell>
+        <mxCell id="P5" value="PostgreSQL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="990" y="55" width="110" height="40" as="geometry"/></mxCell>
+
+        <!-- Lifelines -->
+        <mxCell id="L0" style="endArrow=none;dashed=1;html=1;strokeColor=#666;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="70" y="95" as="sourcePoint"/><mxPoint x="70" y="600" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L1" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="235" y="95" as="sourcePoint"/><mxPoint x="235" y="600" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L2" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="420" y="95" as="sourcePoint"/><mxPoint x="420" y="600" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L3" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="615" y="95" as="sourcePoint"/><mxPoint x="615" y="600" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L4" style="endArrow=none;dashed=1;html=1;strokeColor=#b85450;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="820" y="95" as="sourcePoint"/><mxPoint x="820" y="600" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L5" style="endArrow=none;dashed=1;html=1;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1045" y="95" as="sourcePoint"/><mxPoint x="1045" y="600" as="targetPoint"/></mxGeometry></mxCell>
+
+        <mxCell id="m1" value="1. GET /categories/" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="70" y="130" as="sourcePoint"/><mxPoint x="235" y="130" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m2" value="2. list(tenant_id, session, cache)" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="235" y="165" as="sourcePoint"/><mxPoint x="420" y="165" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m3" value="3. list_cached(tenant_id, cache, session)" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="420" y="200" as="sourcePoint"/><mxPoint x="615" y="200" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m4" value="4. GET tenant:{tenant_id}:categories" style="endArrow=block;endFill=1;html=1;fontSize=10;strokeColor=#b85450;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="615" y="235" as="sourcePoint"/><mxPoint x="820" y="235" as="targetPoint"/></mxGeometry></mxCell>
+
+        <!-- Cache HIT path -->
+        <mxCell id="hit" value="CACHE HIT → retorna JSON directamente" style="rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="840" y="225" width="290" height="30" as="geometry"/></mxCell>
+        <mxCell id="m5hit" value="5a. [JSON categorías]" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;strokeColor=#82b366;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="820" y="270" as="sourcePoint"/><mxPoint x="615" y="270" as="targetPoint"/></mxGeometry></mxCell>
+
+        <!-- Cache MISS path -->
+        <mxCell id="miss" value="CACHE MISS → consulta BD y cachea" style="rounded=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="840" y="305" width="290" height="30" as="geometry"/></mxCell>
+        <mxCell id="m5miss" value="5b. null → no está en caché" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;strokeColor=#b85450;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="820" y="350" as="sourcePoint"/><mxPoint x="615" y="350" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m6" value="6. SELECT * FROM categories WHERE tenant_id=:id" style="endArrow=block;endFill=1;html=1;fontSize=10;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="615" y="385" as="sourcePoint"/><mxPoint x="1045" y="385" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m7" value="7. [Category]" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1045" y="415" as="sourcePoint"/><mxPoint x="615" y="415" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m8" value="8. SET tenant:{id}:categories [JSON] EX 60" style="endArrow=block;endFill=1;html=1;fontSize=10;strokeColor=#b85450;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="615" y="450" as="sourcePoint"/><mxPoint x="820" y="450" as="targetPoint"/></mxGeometry></mxCell>
+
+        <!-- Convergence -->
+        <mxCell id="m9" value="9. [CategoryRead]" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="420" y="495" as="sourcePoint"/><mxPoint x="235" y="495" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m10" value="10. HTTP 200 [categorías del tenant]" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;fontStyle=1;strokeColor=#82b366;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="235" y="530" as="sourcePoint"/><mxPoint x="70" y="530" as="targetPoint"/></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,43 @@
+# ========================
+# Secretos — NUNCA al repo
+# ========================
+.env
+.env.local
+.env.prod
+.env.staging
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# Alembic
+alembic/versions/*.pyc
+
+# Tests
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# Draw.io backups
+*.bkp
+
+# Logs
+*.log

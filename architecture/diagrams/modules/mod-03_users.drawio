@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile>
+  <diagram name="Clases - users/" id="cls_users">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="ttl" value="Módulo users/ — Diagrama de Clases" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=15;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="150" y="10" width="800" height="35" as="geometry"/></mxCell>
+
+        <!-- User Model -->
+        <mxCell id="M1" value="«entity» User (models.py)" style="swimlane;fontStyle=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1"><mxGeometry x="20" y="60" width="270" height="250" as="geometry"/></mxCell>
+        <mxCell id="M1div" value="" style="line;strokeColor=#82b366;" vertex="1" parent="M1"><mxGeometry y="30" width="270" height="10" as="geometry"/></mxCell>
+        <mxCell id="M1a" value="+ id: UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="M1"><mxGeometry y="40" width="270" height="22" as="geometry"/></mxCell>
+        <mxCell id="M1b" value="+ tenant_id: UUID (FK→tenants)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;fontStyle=1;fillColor=#ffe6cc;" vertex="1" parent="M1"><mxGeometry y="62" width="270" height="22" as="geometry"/></mxCell>
+        <mxCell id="M1c" value="+ email: VARCHAR UNIQUE" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="M1"><mxGeometry y="84" width="270" height="22" as="geometry"/></mxCell>
+        <mxCell id="M1d" value="+ name: VARCHAR" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="M1"><mxGeometry y="106" width="270" height="22" as="geometry"/></mxCell>
+        <mxCell id="M1e" value="+ role: ENUM(employee, admin)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="M1"><mxGeometry y="128" width="270" height="22" as="geometry"/></mxCell>
+        <mxCell id="M1f" value="+ hashed_password: VARCHAR" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="M1"><mxGeometry y="150" width="270" height="22" as="geometry"/></mxCell>
+        <mxCell id="M1g" value="+ is_active: Boolean" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="M1"><mxGeometry y="172" width="270" height="22" as="geometry"/></mxCell>
+        <mxCell id="M1h" value="+ created_at: DateTime" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="M1"><mxGeometry y="194" width="270" height="22" as="geometry"/></mxCell>
+        <mxCell id="M1n" value="🔒 tenant_id siempre en queries WHERE" style="text;strokeColor=none;fillColor=#fffacd;align=center;fontSize=10;fontStyle=2;" vertex="1" parent="M1"><mxGeometry y="220" width="270" height="22" as="geometry"/></mxCell>
+
+        <!-- UserService -->
+        <mxCell id="S1" value="UserService (service.py)" style="swimlane;fontStyle=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1"><mxGeometry x="340" y="60" width="310" height="195" as="geometry"/></mxCell>
+        <mxCell id="S1div" value="" style="line;strokeColor=#6c8ebf;" vertex="1" parent="S1"><mxGeometry y="30" width="310" height="10" as="geometry"/></mxCell>
+        <mxCell id="S1a" value="+ create_user(tenant, data, session): UserRead" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="40" width="310" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1b" value="+ list_users(tenant_id, skip, limit, session)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="62" width="310" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1c" value="+ get_user(tenant_id, user_id, session)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="84" width="310" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1d" value="+ update_user(tenant_id, user_id, data, session)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="106" width="310" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1e" value="+ deactivate_user(tenant_id, user_id, session)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="128" width="310" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1n" value="⚡ create_user() verifica límite de plan (Free≤2, Basic≤10)" style="text;strokeColor=none;fillColor=#fffacd;align=center;fontSize=10;fontStyle=2;" vertex="1" parent="S1"><mxGeometry y="158" width="310" height="30" as="geometry"/></mxCell>
+
+        <!-- UserRepository -->
+        <mxCell id="R1" value="UserRepository (repository.py)" style="swimlane;fontStyle=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1"><mxGeometry x="710" y="60" width="310" height="195" as="geometry"/></mxCell>
+        <mxCell id="R1div" value="" style="line;strokeColor=#6c8ebf;" vertex="1" parent="R1"><mxGeometry y="30" width="310" height="10" as="geometry"/></mxCell>
+        <mxCell id="R1a" value="+ create(data, session): User" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="R1"><mxGeometry y="40" width="310" height="22" as="geometry"/></mxCell>
+        <mxCell id="R1b" value="+ get_by_id(tenant_id, user_id, session): User|None" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="R1"><mxGeometry y="62" width="310" height="22" as="geometry"/></mxCell>
+        <mxCell id="R1c" value="+ get_by_email(email, session): User|None" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="R1"><mxGeometry y="84" width="310" height="22" as="geometry"/></mxCell>
+        <mxCell id="R1d" value="+ list(tenant_id, skip, limit, session): [User]" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="R1"><mxGeometry y="106" width="310" height="22" as="geometry"/></mxCell>
+        <mxCell id="R1e" value="+ count(tenant_id, session): int" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="R1"><mxGeometry y="128" width="310" height="22" as="geometry"/></mxCell>
+        <mxCell id="R1n" value="🔒 WHERE tenant_id=:tenant_id en TODAS las queries" style="text;strokeColor=none;fillColor=#fffacd;align=center;fontSize=10;fontStyle=2;" vertex="1" parent="R1"><mxGeometry y="158" width="310" height="30" as="geometry"/></mxCell>
+
+        <!-- Schemas -->
+        <mxCell id="SC1" value="«schema» UserCreate" style="swimlane;fontStyle=3;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1"><mxGeometry x="340" y="300" width="210" height="140" as="geometry"/></mxCell>
+        <mxCell id="SC1div" value="" style="line;strokeColor=#d6b656;" vertex="1" parent="SC1"><mxGeometry y="30" width="210" height="10" as="geometry"/></mxCell>
+        <mxCell id="SC1a" value="+ email: EmailStr" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="SC1"><mxGeometry y="40" width="210" height="22" as="geometry"/></mxCell>
+        <mxCell id="SC1b" value="+ name: str" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="SC1"><mxGeometry y="62" width="210" height="22" as="geometry"/></mxCell>
+        <mxCell id="SC1c" value="+ role: RoleEnum" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="SC1"><mxGeometry y="84" width="210" height="22" as="geometry"/></mxCell>
+        <mxCell id="SC1d" value="+ password: str" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="SC1"><mxGeometry y="106" width="210" height="22" as="geometry"/></mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="A1" value="usa" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" source="S1" target="R1" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="A2" value="gestiona" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" source="R1" target="M1" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="A3" value="recibe" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" source="S1" target="SC1" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Secuencia - Crear Usuario" id="seq_users">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" pageWidth="1400" pageHeight="700">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="ttl" value="users/ — Secuencia: Crear Usuario con Validación de Plan (POST /users/)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=14;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="80" y="10" width="1200" height="35" as="geometry"/></mxCell>
+
+        <mxCell id="P0" value="Admin" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="20" y="55" width="90" height="40" as="geometry"/></mxCell>
+        <mxCell id="P1" value="Router" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="175" y="55" width="100" height="40" as="geometry"/></mxCell>
+        <mxCell id="P2" value="Dependencies" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="345" y="55" width="110" height="40" as="geometry"/></mxCell>
+        <mxCell id="P3" value="UserService" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="530" y="55" width="110" height="40" as="geometry"/></mxCell>
+        <mxCell id="P4" value="UserRepository" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="720" y="55" width="110" height="40" as="geometry"/></mxCell>
+        <mxCell id="P5" value="PostgreSQL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="910" y="55" width="110" height="40" as="geometry"/></mxCell>
+
+        <!-- Lifelines -->
+        <mxCell id="L0" style="endArrow=none;dashed=1;html=1;strokeColor=#666;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="65" y="95" as="sourcePoint"/><mxPoint x="65" y="650" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L1" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="225" y="95" as="sourcePoint"/><mxPoint x="225" y="650" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L2" style="endArrow=none;dashed=1;html=1;strokeColor=#d6b656;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="400" y="95" as="sourcePoint"/><mxPoint x="400" y="650" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L3" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="585" y="95" as="sourcePoint"/><mxPoint x="585" y="650" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L4" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="775" y="95" as="sourcePoint"/><mxPoint x="775" y="650" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L5" style="endArrow=none;dashed=1;html=1;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="965" y="95" as="sourcePoint"/><mxPoint x="965" y="650" as="targetPoint"/></mxGeometry></mxCell>
+
+        <mxCell id="m1" value="1. POST /users/ {email, name, role, password}" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="65" y="130" as="sourcePoint"/><mxPoint x="225" y="130" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m2" value="2. require_admin + get_current_tenant" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="225" y="165" as="sourcePoint"/><mxPoint x="400" y="165" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m3" value="3. User(admin) + Tenant{id, plan}" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="400" y="195" as="sourcePoint"/><mxPoint x="225" y="195" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m4" value="4. create_user(tenant, UserCreate)" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="225" y="230" as="sourcePoint"/><mxPoint x="585" y="230" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m5" value="5. count(tenant_id)" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="585" y="265" as="sourcePoint"/><mxPoint x="775" y="265" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m6" value="6. SELECT COUNT WHERE tenant_id=:id" style="endArrow=block;endFill=1;html=1;fontSize=10;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="775" y="290" as="sourcePoint"/><mxPoint x="965" y="290" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m7" value="7. count=7" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="965" y="315" as="sourcePoint"/><mxPoint x="775" y="315" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m8" value="8. 7" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="775" y="340" as="sourcePoint"/><mxPoint x="585" y="340" as="targetPoint"/></mxGeometry></mxCell>
+
+        <!-- Decision note -->
+        <mxCell id="dec" value="Plan Free y count≥2 → HTTP 403 'Límite alcanzado'&#xa;Plan Basic y count≥10 → HTTP 403 'Límite alcanzado'&#xa;De lo contrario → continúa ↓" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="620" y="355" width="310" height="65" as="geometry"/></mxCell>
+
+        <mxCell id="m9" value="9. hash_password(password)" style="endArrow=block;endFill=1;html=1;fontSize=10;fontStyle=2;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="585" y="440" as="sourcePoint"/><mxPoint x="585" y="440" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m10" value="10. create({email, name, role, hashed_password, tenant_id})" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="585" y="465" as="sourcePoint"/><mxPoint x="775" y="465" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m11" value="11. INSERT INTO users" style="endArrow=block;endFill=1;html=1;fontSize=10;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="775" y="490" as="sourcePoint"/><mxPoint x="965" y="490" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m12" value="12. User" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="965" y="515" as="sourcePoint"/><mxPoint x="775" y="515" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m13" value="13. UserRead" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="585" y="550" as="sourcePoint"/><mxPoint x="225" y="550" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m14" value="14. HTTP 201 Created" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;fontStyle=1;strokeColor=#82b366;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="225" y="580" as="sourcePoint"/><mxPoint x="65" y="580" as="targetPoint"/></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

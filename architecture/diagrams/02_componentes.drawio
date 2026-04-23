@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+  <root>
+    <mxCell id="0"/><mxCell id="1" parent="0"/>
+
+    <!-- Título -->
+    <mxCell id="2" value="Diagrama de Componentes — FastInventory SaaS v2.0 (Monolito Modular)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=16;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="200" y="10" width="1200" height="40" as="geometry"/></mxCell>
+
+    <!-- Docker Compose Container -->
+    <mxCell id="3" value="Docker Compose" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666;verticalAlign=top;fontSize=13;fontStyle=3;dashed=1;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="20" y="60" width="1400" height="1060" as="geometry"/></mxCell>
+
+    <!-- FastAPI Application Container -->
+    <mxCell id="4" value="FastAPI Application (api)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=top;fontSize=13;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="50" y="100" width="1000" height="970" as="geometry"/></mxCell>
+
+    <!-- core/ -->
+    <mxCell id="5" value="core/" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;verticalAlign=top;fontSize=12;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="80" y="140" width="940" height="170" as="geometry"/></mxCell>
+    <mxCell id="5a" value="config.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1"><mxGeometry x="100" y="180" width="130" height="40" as="geometry"/></mxCell>
+    <mxCell id="5b" value="security.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1"><mxGeometry x="250" y="180" width="130" height="40" as="geometry"/></mxCell>
+    <mxCell id="5c" value="dependencies.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1"><mxGeometry x="400" y="180" width="150" height="40" as="geometry"/></mxCell>
+    <mxCell id="5d" value="database.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1"><mxGeometry x="570" y="180" width="130" height="40" as="geometry"/></mxCell>
+    <mxCell id="5e" value="cache.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" vertex="1" parent="1"><mxGeometry x="720" y="180" width="130" height="40" as="geometry"/></mxCell>
+    <mxCell id="5f" value="get_current_user | get_current_tenant | require_admin | require_superadmin" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="100" y="232" width="900" height="60" as="geometry"/></mxCell>
+
+    <!-- modules/ label -->
+    <mxCell id="6" value="modules/" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=13;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="80" y="325" width="150" height="30" as="geometry"/></mxCell>
+
+    <!-- Fila 1 de módulos -->
+    <mxCell id="m1" value="tenants/ [NUEVO]&#xa;router | service | repository&#xa;models | schemas" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1"><mxGeometry x="80" y="360" width="200" height="80" as="geometry"/></mxCell>
+    <mxCell id="m2" value="auth/&#xa;router&#xa;POST /auth/token + /register" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1"><mxGeometry x="300" y="360" width="200" height="80" as="geometry"/></mxCell>
+    <mxCell id="m3" value="users/&#xa;router | service | repository&#xa;models | schemas" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1"><mxGeometry x="520" y="360" width="200" height="80" as="geometry"/></mxCell>
+    <mxCell id="m4" value="categories/&#xa;router | service | repository&#xa;models | schemas + Redis cache" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1"><mxGeometry x="740" y="360" width="200" height="80" as="geometry"/></mxCell>
+
+    <!-- Fila 2 de módulos -->
+    <mxCell id="m5" value="products/&#xa;router | service | repository&#xa;models | schemas + Redis cache" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1"><mxGeometry x="80" y="470" width="200" height="80" as="geometry"/></mxCell>
+    <mxCell id="m6" value="sales/&#xa;router | service | repository&#xa;models | schemas (POS - Transacción Atómica)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1"><mxGeometry x="300" y="470" width="200" height="80" as="geometry"/></mxCell>
+    <mxCell id="m7" value="reports/&#xa;router | service&#xa;schemas + FPDF2 (PDF en memoria)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1"><mxGeometry x="520" y="470" width="200" height="80" as="geometry"/></mxCell>
+    <mxCell id="m8" value="admin/ [NUEVO]&#xa;router | service&#xa;schemas (Sin filtro tenant_id)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1"><mxGeometry x="740" y="470" width="200" height="80" as="geometry"/></mxCell>
+
+    <!-- migrations / tests -->
+    <mxCell id="mg" value="migrations/ (Alembic)&#xa;Una sola migración para todos los tenants" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1"><mxGeometry x="80" y="590" width="300" height="60" as="geometry"/></mxCell>
+    <mxCell id="ts" value="tests/ (pytest + httpx)&#xa;test_tenant_isolation.py [CRÍTICO]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1"><mxGeometry x="400" y="590" width="300" height="60" as="geometry"/></mxCell>
+
+    <!-- Nota de patrón -->
+    <mxCell id="note" value="Patrón por módulo: Router → Service → Repository&#xa;tenant_id extraído del JWT via Depends(get_current_tenant) en Router&#xa;Propagado explícitamente como parámetro hasta Repository" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffacd;strokeColor=#999;fontSize=11;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="80" y="680" width="940" height="70" as="geometry"/></mxCell>
+
+    <!-- Infraestructura: PostgreSQL -->
+    <mxCell id="pg" value="PostgreSQL 14+&#xa;(postgres)&#xa;&#xa;Row-Level Tenancy&#xa;tenant_id en TODAS las tablas&#xa;Alembic migrations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1"><mxGeometry x="1100" y="120" width="260" height="180" as="geometry"/></mxCell>
+
+    <!-- Infraestructura: Redis -->
+    <mxCell id="rd" value="Redis 7+&#xa;(redis)&#xa;&#xa;Caché de catálogos por tenant&#xa;Estado del tenant (TTL 30s)&#xa;Fallback: consulta PostgreSQL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" vertex="1" parent="1"><mxGeometry x="1100" y="340" width="260" height="180" as="geometry"/></mxCell>
+
+    <!-- docker-compose nota -->
+    <mxCell id="dc" value="docker-compose.yml&#xa;services: api | postgres | redis&#xa;Sin K8s ni Service Mesh (CA-05)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666;fontSize=11;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="1100" y="580" width="260" height="80" as="geometry"/></mxCell>
+
+    <!-- Conexiones API → Infra -->
+    <mxCell id="c1" value="SQLAlchemy 2.0 async + asyncpg" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" source="4" target="pg" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="c2" value="redis-py async" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" source="4" target="rd" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+  </root>
+</mxGraphModel>

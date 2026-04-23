@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile>
+  <diagram name="Clases - admin/" id="cls_adm">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="ttl" value="Módulo admin/ — Diagrama de Clases (Super-Administración de Plataforma)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=15;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="100" y="10" width="950" height="35" as="geometry"/></mxCell>
+
+        <!-- AdminService -->
+        <mxCell id="S1" value="AdminService (service.py)" style="swimlane;fontStyle=1;startSize=30;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" vertex="1" parent="1"><mxGeometry x="20" y="60" width="360" height="240" as="geometry"/></mxCell>
+        <mxCell id="S1div" value="" style="line;strokeColor=#b85450;" vertex="1" parent="S1"><mxGeometry y="30" width="360" height="10" as="geometry"/></mxCell>
+        <mxCell id="S1a" value="+ list_tenants(skip, limit, session): [TenantAdminRead]" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="40" width="360" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1b" value="+ get_tenant(tenant_id, session): TenantAdminRead" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="62" width="360" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1c" value="+ suspend_tenant(tenant_id, session, cache)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="84" width="360" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1d" value="+ activate_tenant(tenant_id, session, cache)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="106" width="360" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1e" value="+ change_plan(tenant_id, new_plan, session, cache)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="128" width="360" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1f" value="+ get_metrics(session): MetricsRead" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="S1"><mxGeometry y="150" width="360" height="22" as="geometry"/></mxCell>
+        <mxCell id="S1n" value="⚠️ SIN filtro tenant_id — excepción documentada (RF-07, ADR-01)&#xa;Accede a METADATOS del tenant (no a datos de negocio)" style="text;strokeColor=none;fillColor=#f8cecc;align=center;fontSize=10;fontStyle=2;" vertex="1" parent="S1"><mxGeometry y="178" width="360" height="50" as="geometry"/></mxCell>
+
+        <!-- Schemas -->
+        <mxCell id="SC1" value="«schema» TenantAdminRead" style="swimlane;fontStyle=3;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1"><mxGeometry x="440" y="60" width="240" height="175" as="geometry"/></mxCell>
+        <mxCell id="SC1div" value="" style="line;strokeColor=#d6b656;" vertex="1" parent="SC1"><mxGeometry y="30" width="240" height="10" as="geometry"/></mxCell>
+        <mxCell id="SC1a" value="+ id: UUID" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="SC1"><mxGeometry y="40" width="240" height="22" as="geometry"/></mxCell>
+        <mxCell id="SC1b" value="+ name: str" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="SC1"><mxGeometry y="62" width="240" height="22" as="geometry"/></mxCell>
+        <mxCell id="SC1c" value="+ slug: str" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="SC1"><mxGeometry y="84" width="240" height="22" as="geometry"/></mxCell>
+        <mxCell id="SC1d" value="+ plan: PlanEnum" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="SC1"><mxGeometry y="106" width="240" height="22" as="geometry"/></mxCell>
+        <mxCell id="SC1e" value="+ is_active: bool" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="SC1"><mxGeometry y="128" width="240" height="22" as="geometry"/></mxCell>
+        <mxCell id="SC1f" value="+ created_at: datetime" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="SC1"><mxGeometry y="150" width="240" height="22" as="geometry"/></mxCell>
+
+        <!-- MetricsRead -->
+        <mxCell id="MR" value="«schema» MetricsRead" style="swimlane;fontStyle=3;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1"><mxGeometry x="440" y="270" width="240" height="130" as="geometry"/></mxCell>
+        <mxCell id="MRdiv" value="" style="line;strokeColor=#d6b656;" vertex="1" parent="MR"><mxGeometry y="30" width="240" height="10" as="geometry"/></mxCell>
+        <mxCell id="MRa" value="+ active_tenants: int" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="MR"><mxGeometry y="40" width="240" height="22" as="geometry"/></mxCell>
+        <mxCell id="MRb" value="+ suspended_tenants: int" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="MR"><mxGeometry y="62" width="240" height="22" as="geometry"/></mxCell>
+        <mxCell id="MRc" value="+ total_tenants: int" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="MR"><mxGeometry y="84" width="240" height="22" as="geometry"/></mxCell>
+        <mxCell id="MRd" value="+ daily_sales_volume: Decimal" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="MR"><mxGeometry y="106" width="240" height="22" as="geometry"/></mxCell>
+
+        <!-- PlanAuditLog -->
+        <mxCell id="PAL" value="«entity» PlanAuditLog" style="swimlane;fontStyle=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1"><mxGeometry x="750" y="60" width="280" height="175" as="geometry"/></mxCell>
+        <mxCell id="PALdiv" value="" style="line;strokeColor=#82b366;" vertex="1" parent="PAL"><mxGeometry y="30" width="280" height="10" as="geometry"/></mxCell>
+        <mxCell id="PALa" value="+ id: UUID (PK)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="PAL"><mxGeometry y="40" width="280" height="22" as="geometry"/></mxCell>
+        <mxCell id="PALb" value="+ tenant_id: UUID (FK→tenants)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="PAL"><mxGeometry y="62" width="280" height="22" as="geometry"/></mxCell>
+        <mxCell id="PALc" value="+ old_plan: PlanEnum" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="PAL"><mxGeometry y="84" width="280" height="22" as="geometry"/></mxCell>
+        <mxCell id="PALd" value="+ new_plan: PlanEnum" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="PAL"><mxGeometry y="106" width="280" height="22" as="geometry"/></mxCell>
+        <mxCell id="PALe" value="+ changed_at: DateTime" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="PAL"><mxGeometry y="128" width="280" height="22" as="geometry"/></mxCell>
+        <mxCell id="PALn" value="Auditoría: registrada en change_plan()" style="text;strokeColor=none;fillColor=#fffacd;align=center;fontSize=10;fontStyle=2;" vertex="1" parent="PAL"><mxGeometry y="152" width="280" height="16" as="geometry"/></mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="A1" value="retorna" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" source="S1" target="SC1" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="A2" value="retorna" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" source="S1" target="MR" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="A3" value="registra" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" source="S1" target="PAL" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Secuencia - Suspender Tenant" id="seq_adm">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" pageWidth="1400" pageHeight="680">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="ttl" value="admin/ — Secuencia: Suspender Tenant con Efecto Inmediato ≤30s (PATCH /admin/tenants/{id}/suspend)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=14;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="80" y="10" width="1200" height="35" as="geometry"/></mxCell>
+
+        <mxCell id="P0" value="SuperAdmin" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="20" y="55" width="100" height="40" as="geometry"/></mxCell>
+        <mxCell id="P1" value="Router" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="195" y="55" width="100" height="40" as="geometry"/></mxCell>
+        <mxCell id="P2" value="Dependencies" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="380" y="55" width="110" height="40" as="geometry"/></mxCell>
+        <mxCell id="P3" value="AdminService" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="580" y="55" width="110" height="40" as="geometry"/></mxCell>
+        <mxCell id="P4" value="TenantRepo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="790" y="55" width="100" height="40" as="geometry"/></mxCell>
+        <mxCell id="P5" value="PostgreSQL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="1000" y="55" width="110" height="40" as="geometry"/></mxCell>
+        <mxCell id="P6" value="Redis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="1220" y="55" width="90" height="40" as="geometry"/></mxCell>
+
+        <!-- Lifelines -->
+        <mxCell id="L0" style="endArrow=none;dashed=1;html=1;strokeColor=#b85450;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="70" y="95" as="sourcePoint"/><mxPoint x="70" y="640" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L1" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="245" y="95" as="sourcePoint"/><mxPoint x="245" y="640" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L2" style="endArrow=none;dashed=1;html=1;strokeColor=#d6b656;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="435" y="95" as="sourcePoint"/><mxPoint x="435" y="640" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L3" style="endArrow=none;dashed=1;html=1;strokeColor=#b85450;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="635" y="95" as="sourcePoint"/><mxPoint x="635" y="640" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L4" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="840" y="95" as="sourcePoint"/><mxPoint x="840" y="640" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L5" style="endArrow=none;dashed=1;html=1;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1055" y="95" as="sourcePoint"/><mxPoint x="1055" y="640" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L6" style="endArrow=none;dashed=1;html=1;strokeColor=#b85450;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1265" y="95" as="sourcePoint"/><mxPoint x="1265" y="640" as="targetPoint"/></mxGeometry></mxCell>
+
+        <mxCell id="m1" value="1. PATCH /admin/tenants/{id}/suspend" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="70" y="130" as="sourcePoint"/><mxPoint x="245" y="130" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m2" value="2. require_superadmin(token)" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="245" y="165" as="sourcePoint"/><mxPoint x="435" y="165" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m3" value="3. SuperAdmin ✅ (tenant_id = None en JWT)" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;strokeColor=#82b366;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="435" y="195" as="sourcePoint"/><mxPoint x="245" y="195" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m4" value="4. suspend_tenant(tenant_id, session, cache)" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="245" y="230" as="sourcePoint"/><mxPoint x="635" y="230" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m5" value="5. update(tenant_id, {is_active: False})" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="635" y="265" as="sourcePoint"/><mxPoint x="840" y="265" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m6" value="6. UPDATE tenants SET is_active=false WHERE id=:id" style="endArrow=block;endFill=1;html=1;fontSize=10;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="840" y="295" as="sourcePoint"/><mxPoint x="1055" y="295" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m7" value="7. OK" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1055" y="325" as="sourcePoint"/><mxPoint x="840" y="325" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m8" value="8. SET tenant:{tenant_id}:status = suspended (TTL 30s)" style="endArrow=block;endFill=1;html=1;fontSize=10;strokeColor=#b85450;fontStyle=1;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="635" y="365" as="sourcePoint"/><mxPoint x="1265" y="365" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m9" value="9. OK" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;strokeColor=#b85450;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1265" y="395" as="sourcePoint"/><mxPoint x="635" y="395" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m10" value="10. TenantAdminRead {is_active: false}" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="635" y="435" as="sourcePoint"/><mxPoint x="245" y="435" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m11" value="11. HTTP 200 {is_active: false}" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;fontStyle=1;strokeColor=#82b366;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="245" y="470" as="sourcePoint"/><mxPoint x="70" y="470" as="targetPoint"/></mxGeometry></mxCell>
+
+        <!-- Tenant request después de suspensión -->
+        <mxCell id="sep" value="" style="line;strokeColor=#999;dashed=1;" vertex="1" parent="1"><mxGeometry x="20" y="495" width="1330" height="10" as="geometry"/></mxCell>
+        <mxCell id="sep_label" value="En ≤30s — siguiente request del tenant suspendido:" style="text;strokeColor=none;fillColor=none;align=left;fontSize=11;fontStyle=3;" vertex="1" parent="1"><mxGeometry x="20" y="510" width="350" height="20" as="geometry"/></mxCell>
+
+        <mxCell id="tu" value="Usuario del Tenant" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666;fontSize=10;" vertex="1" parent="1"><mxGeometry x="20" y="535" width="110" height="35" as="geometry"/></mxCell>
+        <mxCell id="m12" value="GET /products/ (Bearer JWT del tenant suspendido)" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="130" y="555" as="sourcePoint"/><mxPoint x="245" y="555" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m13" value="get_current_tenant() → GET tenant:{id}:status → 'suspended'" style="endArrow=block;endFill=1;html=1;fontSize=10;strokeColor=#b85450;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="245" y="585" as="sourcePoint"/><mxPoint x="1265" y="585" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m14" value="HTTP 403 'Tu negocio ha sido suspendido'" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;fontStyle=1;strokeColor=#b85450;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="245" y="615" as="sourcePoint"/><mxPoint x="130" y="615" as="targetPoint"/></mxGeometry></mxCell>
+
+        <mxCell id="note" value="HU-16: Efecto en ≤30s (TTL Redis = 30s)&#xa;Aplica a todos los workers Uvicorn simultáneamente" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="1150" y="490" width="200" height="60" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

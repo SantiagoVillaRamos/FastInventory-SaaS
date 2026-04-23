@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+  <root>
+    <mxCell id="0"/><mxCell id="1" parent="0"/>
+
+    <!-- Título -->
+    <mxCell id="2" value="Diagrama de Actividades — Onboarding Autónomo (POST /auth/register)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=16;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="100" y="10" width="950" height="40" as="geometry"/></mxCell>
+
+    <!-- START -->
+    <mxCell id="start" value="" style="ellipse;aspect=fixed;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1"><mxGeometry x="530" y="60" width="30" height="30" as="geometry"/></mxCell>
+
+    <!-- [1] Recibir datos -->
+    <mxCell id="a1" value="Recibir datos de registro&#xa;{nombre, slug, plan,&#xa;admin_email, admin_password}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1"><mxGeometry x="440" y="120" width="260" height="70" as="geometry"/></mxCell>
+
+    <!-- [2] Validar schema -->
+    <mxCell id="a2" value="Validar schema Pydantic&#xa;(tipos, formatos, campos requeridos)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1"><mxGeometry x="440" y="220" width="260" height="60" as="geometry"/></mxCell>
+
+    <!-- Decision: schema OK -->
+    <mxCell id="d1" value="¿Schema válido?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1"><mxGeometry x="465" y="310" width="210" height="70" as="geometry"/></mxCell>
+
+    <!-- No → HTTP 422 schema -->
+    <mxCell id="a3" value="HTTP 422&#xa;Datos inválidos" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" vertex="1" parent="1"><mxGeometry x="760" y="320" width="160" height="50" as="geometry"/></mxCell>
+
+    <!-- END schema fail -->
+    <mxCell id="end1" value="" style="ellipse;aspect=fixed;fillColor=#000000;strokeColor=#000000;strokeWidth=3;" vertex="1" parent="1"><mxGeometry x="820" y="390" width="30" height="30" as="geometry"/></mxCell>
+
+    <!-- [3] Ver slug -->
+    <mxCell id="a4" value="TenantRepository.get_by_slug(slug)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1"><mxGeometry x="440" y="420" width="260" height="50" as="geometry"/></mxCell>
+
+    <!-- Decision: slug disponible -->
+    <mxCell id="d2" value="¿Slug disponible?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1"><mxGeometry x="465" y="500" width="210" height="70" as="geometry"/></mxCell>
+
+    <!-- No → HTTP 422 slug -->
+    <mxCell id="a5" value="HTTP 422&#xa;'Slug ya existe'" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" vertex="1" parent="1"><mxGeometry x="760" y="515" width="160" height="50" as="geometry"/></mxCell>
+    <mxCell id="end2" value="" style="ellipse;aspect=fixed;fillColor=#000000;strokeColor=#000000;strokeWidth=3;" vertex="1" parent="1"><mxGeometry x="820" y="590" width="30" height="30" as="geometry"/></mxCell>
+
+    <!-- BEGIN TX -->
+    <mxCell id="a6" value="async with session.begin()&#xa;BEGIN TRANSACTION" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="440" y="610" width="260" height="55" as="geometry"/></mxCell>
+
+    <!-- INSERT tenant -->
+    <mxCell id="a7" value="INSERT INTO tenants&#xa;{id, name, slug, plan, is_active=true}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1"><mxGeometry x="440" y="695" width="260" height="60" as="geometry"/></mxCell>
+
+    <!-- Decision: tenant OK -->
+    <mxCell id="d3" value="¿INSERT OK?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1"><mxGeometry x="465" y="785" width="210" height="65" as="geometry"/></mxCell>
+
+    <!-- No → ROLLBACK -->
+    <mxCell id="a8" value="ROLLBACK automático&#xa;(async with session.begin())" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" vertex="1" parent="1"><mxGeometry x="760" y="797" width="200" height="50" as="geometry"/></mxCell>
+    <mxCell id="a9" value="HTTP 500&#xa;Intente nuevamente" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" vertex="1" parent="1"><mxGeometry x="760" y="865" width="200" height="50" as="geometry"/></mxCell>
+    <mxCell id="end3" value="" style="ellipse;aspect=fixed;fillColor=#000000;strokeColor=#000000;strokeWidth=3;" vertex="1" parent="1"><mxGeometry x="830" y="935" width="30" height="30" as="geometry"/></mxCell>
+
+    <!-- INSERT user admin -->
+    <mxCell id="a10" value="INSERT INTO users&#xa;{tenant_id=nuevo_tenant.id,&#xa;role='admin', hashed_password}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1"><mxGeometry x="440" y="890" width="260" height="70" as="geometry"/></mxCell>
+
+    <!-- Decision: user OK -->
+    <mxCell id="d4" value="¿INSERT OK?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1"><mxGeometry x="465" y="990" width="210" height="65" as="geometry"/></mxCell>
+
+    <!-- COMMIT -->
+    <mxCell id="a11" value="COMMIT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="440" y="1090" width="260" height="50" as="geometry"/></mxCell>
+
+    <!-- Redis update -->
+    <mxCell id="a12" value="SET Redis: tenant:{id}:status = active&#xa;TTL 30 segundos" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1"><mxGeometry x="440" y="1170" width="260" height="55" as="geometry"/></mxCell>
+
+    <!-- HTTP 201 -->
+    <mxCell id="a13" value="HTTP 201 Created&#xa;{tenant_id, slug, plan, admin_email}&#xa;Tenant activo inmediatamente" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="440" y="1255" width="260" height="70" as="geometry"/></mxCell>
+
+    <!-- END success -->
+    <mxCell id="end4" value="" style="ellipse;aspect=fixed;fillColor=#000000;strokeColor=#000000;strokeWidth=3;" vertex="1" parent="1"><mxGeometry x="550" y="1355" width="30" height="30" as="geometry"/></mxCell>
+
+    <!-- FLUJO PRINCIPAL (flechas hacia abajo) -->
+    <mxCell id="f1" style="endArrow=block;endFill=1;html=1;" edge="1" source="start" target="a1" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="f2" style="endArrow=block;endFill=1;html=1;" edge="1" source="a1" target="a2" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="f3" style="endArrow=block;endFill=1;html=1;" edge="1" source="a2" target="d1" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="f4" value="Sí" style="endArrow=block;endFill=1;html=1;fontSize=11;fontStyle=1;fillColor=#d5e8d4;" edge="1" source="d1" target="a4" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="f5" value="No" style="endArrow=block;endFill=1;html=1;fontSize=11;fontStyle=1;fillColor=#f8cecc;" edge="1" source="d1" target="a3" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="f6" style="endArrow=block;endFill=1;html=1;" edge="1" source="a3" target="end1" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="f7" style="endArrow=block;endFill=1;html=1;" edge="1" source="a4" target="d2" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="f8" value="Sí" style="endArrow=block;endFill=1;html=1;fontSize=11;fontStyle=1;fillColor=#d5e8d4;" edge="1" source="d2" target="a6" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="f9" value="No" style="endArrow=block;endFill=1;html=1;fontSize=11;fontStyle=1;fillColor=#f8cecc;" edge="1" source="d2" target="a5" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="f10" style="endArrow=block;endFill=1;html=1;" edge="1" source="a5" target="end2" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="f11" style="endArrow=block;endFill=1;html=1;" edge="1" source="a6" target="a7" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="f12" style="endArrow=block;endFill=1;html=1;" edge="1" source="a7" target="d3" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="f13" value="Sí" style="endArrow=block;endFill=1;html=1;fontSize=11;fontStyle=1;fillColor=#d5e8d4;" edge="1" source="d3" target="a10" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="f14" value="No" style="endArrow=block;endFill=1;html=1;fontSize=11;fontStyle=1;fillColor=#f8cecc;" edge="1" source="d3" target="a8" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="f15" style="endArrow=block;endFill=1;html=1;" edge="1" source="a8" target="a9" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="f16" style="endArrow=block;endFill=1;html=1;" edge="1" source="a9" target="end3" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="f17" style="endArrow=block;endFill=1;html=1;" edge="1" source="a10" target="d4" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="f18" value="Sí" style="endArrow=block;endFill=1;html=1;fontSize=11;fontStyle=1;fillColor=#d5e8d4;" edge="1" source="d4" target="a11" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="f19" value="No" style="endArrow=block;endFill=1;html=1;fontSize=11;fontStyle=1;fillColor=#f8cecc;" edge="1" source="d4" target="a8" parent="1"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="760" y="1022"/><mxPoint x="860" y="1022"/><mxPoint x="860" y="822"/></Array></mxGeometry></mxCell>
+    <mxCell id="f20" style="endArrow=block;endFill=1;html=1;" edge="1" source="a11" target="a12" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="f21" style="endArrow=block;endFill=1;html=1;" edge="1" source="a12" target="a13" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="f22" style="endArrow=block;endFill=1;html=1;" edge="1" source="a13" target="end4" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- Nota sobre correo -->
+    <mxCell id="nota" value="⚠️ En v2.0 NO hay confirmación por correo&#xa;El tenant queda activo inmediatamente (vision_y_alcance.md §3.3)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffacd;strokeColor=#999;fontSize=11;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="80" y="1260" width="320" height="65" as="geometry"/></mxCell>
+  </root>
+</mxGraphModel>

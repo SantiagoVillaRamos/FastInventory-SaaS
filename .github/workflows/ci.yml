@@ -1,0 +1,73 @@
+name: CI — FastInventory SaaS
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-and-test:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: fastinventory_user
+          POSTGRES_PASSWORD: fastinventory_pass
+          POSTGRES_DB: fastinventory_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Verificar sintaxis con Ruff
+        run: |
+          pip install ruff
+          ruff check app/
+
+      - name: Ejecutar migraciones
+        env:
+          DATABASE_URL: postgresql+asyncpg://fastinventory_user:fastinventory_pass@localhost:5432/fastinventory_db
+          REDIS_URL: redis://localhost:6379
+          SECRET_KEY: ci-secret-key-for-testing-only
+          ACCESS_TOKEN_EXPIRE_MINUTES: 30
+        run: alembic upgrade head
+
+      - name: Ejecutar Tests
+        env:
+          DATABASE_URL: postgresql+asyncpg://fastinventory_user:fastinventory_pass@localhost:5432/fastinventory_db
+          REDIS_URL: redis://localhost:6379
+          SECRET_KEY: ci-secret-key-for-testing-only
+          ACCESS_TOKEN_EXPIRE_MINUTES: 30
+        run: |
+          pip install pytest pytest-asyncio httpx
+          pytest tests/ -v --tb=short

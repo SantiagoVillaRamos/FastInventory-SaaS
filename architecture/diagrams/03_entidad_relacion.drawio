@@ -1,0 +1,382 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.5 Chrome/138.0.7204.251 Electron/37.6.1 Safari/537.36" version="28.2.5">
+  <diagram id="2btVP06zyDXXf22lYan1" name="Página-1">
+    <mxGraphModel dx="1042" dy="667" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="Diagrama Entidad-Relación — FastInventory SaaS v2.0 (Row-Level Tenancy)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=16;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="200" y="10" width="1200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="T1" value="tenants (tabla padre)" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="620" y="60" width="320" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="T1R1" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T1" vertex="1">
+          <mxGeometry y="30" width="320" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T1R1a" value="🔑 id" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T1R1" vertex="1">
+          <mxGeometry width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T1R1b" value="UUID PK" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T1R1" vertex="1">
+          <mxGeometry x="200" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T1R2" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T1" vertex="1">
+          <mxGeometry y="60" width="320" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T1R2a" value="name" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T1R2" vertex="1">
+          <mxGeometry width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T1R2b" value="VARCHAR(150)" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T1R2" vertex="1">
+          <mxGeometry x="200" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T1R3" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T1" vertex="1">
+          <mxGeometry y="90" width="320" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T1R3a" value="slug" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T1R3" vertex="1">
+          <mxGeometry width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T1R3b" value="VARCHAR(100) UK" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T1R3" vertex="1">
+          <mxGeometry x="200" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T1R4" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T1" vertex="1">
+          <mxGeometry y="120" width="320" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T1R4a" value="plan" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T1R4" vertex="1">
+          <mxGeometry width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T1R4b" value="ENUM(free,basic,pro)" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T1R4" vertex="1">
+          <mxGeometry x="200" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T1R5" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T1" vertex="1">
+          <mxGeometry y="150" width="320" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T1R5a" value="is_active" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T1R5" vertex="1">
+          <mxGeometry width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T1R5b" value="BOOLEAN" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T1R5" vertex="1">
+          <mxGeometry x="200" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T1R6" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;" parent="T1" vertex="1">
+          <mxGeometry y="180" width="320" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T1R6a" value="created_at" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T1R6" vertex="1">
+          <mxGeometry width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T1R6b" value="TIMESTAMP" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T1R6" vertex="1">
+          <mxGeometry x="200" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T2" value="users" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="120" y="350" width="300" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="T2R1" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T2" vertex="1">
+          <mxGeometry y="30" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T2R1a" value="🔑 id" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T2R1" vertex="1">
+          <mxGeometry width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T2R1b" value="UUID PK" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T2R1" vertex="1">
+          <mxGeometry x="180" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T2R2" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;fillColor=#ffe6cc;" parent="T2" vertex="1">
+          <mxGeometry y="60" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T2R2a" value="🔗 tenant_id" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;fontStyle=1;" parent="T2R2" vertex="1">
+          <mxGeometry width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T2R2b" value="UUID FK→tenants" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;fontStyle=1;" parent="T2R2" vertex="1">
+          <mxGeometry x="180" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T2R3" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T2" vertex="1">
+          <mxGeometry y="90" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T2R3a" value="email" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T2R3" vertex="1">
+          <mxGeometry width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T2R3b" value="VARCHAR UK" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T2R3" vertex="1">
+          <mxGeometry x="180" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T2R4" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T2" vertex="1">
+          <mxGeometry y="120" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T2R4a" value="role" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T2R4" vertex="1">
+          <mxGeometry width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T2R4b" value="ENUM(employee,admin)" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T2R4" vertex="1">
+          <mxGeometry x="180" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T2R5" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T2" vertex="1">
+          <mxGeometry y="150" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T2R5a" value="hashed_password" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T2R5" vertex="1">
+          <mxGeometry width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T2R5b" value="VARCHAR" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T2R5" vertex="1">
+          <mxGeometry x="180" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T2R6" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;" parent="T2" vertex="1">
+          <mxGeometry y="180" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T2R6a" value="is_active" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T2R6" vertex="1">
+          <mxGeometry width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T2R6b" value="BOOLEAN" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T2R6" vertex="1">
+          <mxGeometry x="180" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T3" value="categories" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="620" y="350" width="300" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="T3R1" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T3" vertex="1">
+          <mxGeometry y="30" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T3R1a" value="🔑 id" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T3R1" vertex="1">
+          <mxGeometry width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T3R1b" value="UUID PK" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T3R1" vertex="1">
+          <mxGeometry x="180" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T3R2" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;fillColor=#ffe6cc;" parent="T3" vertex="1">
+          <mxGeometry y="60" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T3R2a" value="🔗 tenant_id" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;fontStyle=1;" parent="T3R2" vertex="1">
+          <mxGeometry width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T3R2b" value="UUID FK→tenants" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;fontStyle=1;" parent="T3R2" vertex="1">
+          <mxGeometry x="180" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T3R3" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T3" vertex="1">
+          <mxGeometry y="90" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T3R3a" value="name" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T3R3" vertex="1">
+          <mxGeometry width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T3R3b" value="VARCHAR(100)" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T3R3" vertex="1">
+          <mxGeometry x="180" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T3R4" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;" parent="T3" vertex="1">
+          <mxGeometry y="120" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T3R4a" value="description" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T3R4" vertex="1">
+          <mxGeometry width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T3R4b" value="TEXT" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T3R4" vertex="1">
+          <mxGeometry x="180" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T4" value="products" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="1280" y="345" width="310" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="T4R1" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T4" vertex="1">
+          <mxGeometry y="30" width="310" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T4R1a" value="🔑 id" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T4R1" vertex="1">
+          <mxGeometry y="40" width="190" height="-10" as="geometry">
+            <mxRectangle width="190" height="-10" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T4R1b" value="UUID PK" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T4R1" vertex="1">
+          <mxGeometry x="190" y="40" width="120" height="-10" as="geometry">
+            <mxRectangle width="120" height="-10" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T4R2" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;fillColor=#ffe6cc;" parent="T4" vertex="1">
+          <mxGeometry y="60" width="310" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T4R2a" value="🔗 tenant_id" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;fontStyle=1;" parent="T4R2" vertex="1">
+          <mxGeometry y="40" width="190" height="-10" as="geometry">
+            <mxRectangle width="190" height="-10" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T4R2b" value="UUID FK→tenants" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;fontStyle=1;" parent="T4R2" vertex="1">
+          <mxGeometry x="190" y="40" width="120" height="-10" as="geometry">
+            <mxRectangle width="120" height="-10" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T4R3" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T4" vertex="1">
+          <mxGeometry y="90" width="310" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T4R3a" value="🔗 category_id" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T4R3" vertex="1">
+          <mxGeometry y="40" width="190" height="-10" as="geometry">
+            <mxRectangle width="190" height="-10" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T4R3b" value="UUID FK→categories" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T4R3" vertex="1">
+          <mxGeometry x="190" y="40" width="120" height="-10" as="geometry">
+            <mxRectangle width="120" height="-10" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T4R4" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T4" vertex="1">
+          <mxGeometry y="120" width="310" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T4R4a" value="name" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T4R4" vertex="1">
+          <mxGeometry y="40" width="190" height="-10" as="geometry">
+            <mxRectangle width="190" height="-10" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T4R4b" value="VARCHAR(200)" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T4R4" vertex="1">
+          <mxGeometry x="190" y="40" width="120" height="-10" as="geometry">
+            <mxRectangle width="120" height="-10" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T4R5" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T4" vertex="1">
+          <mxGeometry y="150" width="310" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T4R5a" value="price / stock / unit" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T4R5" vertex="1">
+          <mxGeometry y="40" width="190" height="-10" as="geometry">
+            <mxRectangle width="190" height="-10" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T4R5b" value="DECIMAL/INT/VARCHAR" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T4R5" vertex="1">
+          <mxGeometry x="190" y="40" width="120" height="-10" as="geometry">
+            <mxRectangle width="120" height="-10" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T4R6" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;" parent="T4" vertex="1">
+          <mxGeometry y="180" width="310" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T4R6a" value="description" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T4R6" vertex="1">
+          <mxGeometry y="40" width="190" height="-10" as="geometry">
+            <mxRectangle width="190" height="-10" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T4R6b" value="TEXT" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T4R6" vertex="1">
+          <mxGeometry x="190" y="40" width="120" height="-10" as="geometry">
+            <mxRectangle width="120" height="-10" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T5" value="sales" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;fontSize=12;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="300" y="700" width="300" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="T5R1" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T5" vertex="1">
+          <mxGeometry y="30" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T5R1a" value="🔑 id" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T5R1" vertex="1">
+          <mxGeometry width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T5R1b" value="UUID PK" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T5R1" vertex="1">
+          <mxGeometry x="180" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T5R2" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;fillColor=#ffe6cc;" parent="T5" vertex="1">
+          <mxGeometry y="60" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T5R2a" value="🔗 tenant_id" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;fontStyle=1;" parent="T5R2" vertex="1">
+          <mxGeometry width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T5R2b" value="UUID FK→tenants" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;fontStyle=1;" parent="T5R2" vertex="1">
+          <mxGeometry x="180" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T5R3" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T5" vertex="1">
+          <mxGeometry y="90" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T5R3a" value="🔗 seller_id" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T5R3" vertex="1">
+          <mxGeometry width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T5R3b" value="UUID FK→users" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T5R3" vertex="1">
+          <mxGeometry x="180" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T5R4" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T5" vertex="1">
+          <mxGeometry y="120" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T5R4a" value="total" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T5R4" vertex="1">
+          <mxGeometry width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T5R4b" value="DECIMAL" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T5R4" vertex="1">
+          <mxGeometry x="180" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T5R5" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;" parent="T5" vertex="1">
+          <mxGeometry y="150" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T5R5a" value="created_at" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T5R5" vertex="1">
+          <mxGeometry width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T5R5b" value="TIMESTAMP" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T5R5" vertex="1">
+          <mxGeometry x="180" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6" value="sale_items" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;fontSize=12;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="780" y="700" width="310" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="T6R1" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T6" vertex="1">
+          <mxGeometry y="30" width="310" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6R1a" value="🔑 id" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T6R1" vertex="1">
+          <mxGeometry width="190" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6R1b" value="UUID PK" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T6R1" vertex="1">
+          <mxGeometry x="190" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6R2" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T6" vertex="1">
+          <mxGeometry y="60" width="310" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6R2a" value="🔗 sale_id" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T6R2" vertex="1">
+          <mxGeometry width="190" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6R2b" value="UUID FK→sales" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T6R2" vertex="1">
+          <mxGeometry x="190" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6R3" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;fillColor=#ffe6cc;" parent="T6" vertex="1">
+          <mxGeometry y="90" width="310" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6R3a" value="🔗 tenant_id" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;fontStyle=1;" parent="T6R3" vertex="1">
+          <mxGeometry width="190" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6R3b" value="UUID FK→tenants" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;fontStyle=1;" parent="T6R3" vertex="1">
+          <mxGeometry x="190" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6R4" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T6" vertex="1">
+          <mxGeometry y="120" width="310" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6R4a" value="🔗 product_id" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T6R4" vertex="1">
+          <mxGeometry width="190" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6R4b" value="UUID FK→products" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T6R4" vertex="1">
+          <mxGeometry x="190" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6R5" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T6" vertex="1">
+          <mxGeometry y="150" width="310" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6R5a" value="quantity" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T6R5" vertex="1">
+          <mxGeometry width="190" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6R5b" value="INTEGER" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T6R5" vertex="1">
+          <mxGeometry x="190" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6R6" value="" style="shape=tableRow;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;" parent="T6" vertex="1">
+          <mxGeometry y="180" width="310" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6R6a" value="unit_price" style="connectable=0;fillColor=none;strokeColor=none;align=left;spacingLeft=5;" parent="T6R6" vertex="1">
+          <mxGeometry width="190" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="T6R6b" value="DECIMAL" style="connectable=0;fillColor=none;strokeColor=none;align=right;spacingRight=5;" parent="T6R6" vertex="1">
+          <mxGeometry x="190" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="r1" value="1" style="endArrow=ERmany;startArrow=ERone;html=1;exitX=0;exitY=0.5;entryX=0.5;entryY=0;" parent="1" source="T1R1" target="T2R2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r2" value="1" style="endArrow=ERmany;startArrow=ERone;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" parent="1" source="T1R1" target="T3R2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r3" value="1" style="endArrow=ERmany;startArrow=ERone;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" parent="1" source="T1R1" target="T4R2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r4" value="1" style="endArrow=ERmany;startArrow=ERone;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" parent="1" source="T1R1" target="T5R2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r5" value="1" style="endArrow=ERmany;startArrow=ERone;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" parent="1" source="T1R1" target="T6R3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r6" value="1" style="endArrow=ERmany;startArrow=ERone;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" parent="1" source="T3R1" target="T4R3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r7" value="1" style="endArrow=ERmany;startArrow=ERone;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" parent="1" source="T2R1" target="T5R3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r8" value="1" style="endArrow=ERmany;startArrow=ERone;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" parent="1" source="T5R1" target="T6R2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r9" value="1" style="endArrow=ERmany;startArrow=ERone;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" parent="1" source="T4R1" target="T6R4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="leg" value="🔑 PK = Clave Primaria  |  🔗 FK = Clave Foránea  |  UK = Única  |  Columnas tenant_id resaltadas en naranja = Aislamiento Row-Level Tenancy (ADR-06)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffacd;strokeColor=#999;fontSize=11;fontStyle=2;" parent="1" vertex="1">
+          <mxGeometry x="120" y="960" width="1300" height="50" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

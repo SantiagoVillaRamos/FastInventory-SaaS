@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile>
+  <diagram name="Clases - auth/" id="cls_auth">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="ttl" value="Módulo auth/ + core/ — Diagrama de Clases" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=15;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="150" y="10" width="800" height="35" as="geometry"/></mxCell>
+
+        <!-- SecurityModule -->
+        <mxCell id="SM" value="SecurityModule (core/security.py)" style="swimlane;fontStyle=1;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1"><mxGeometry x="20" y="60" width="310" height="180" as="geometry"/></mxCell>
+        <mxCell id="SMdiv" value="" style="line;strokeColor=#d6b656;" vertex="1" parent="SM"><mxGeometry y="30" width="310" height="10" as="geometry"/></mxCell>
+        <mxCell id="SMa" value="+ create_access_token(sub, role, tenant_id): str" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="SM"><mxGeometry y="40" width="310" height="22" as="geometry"/></mxCell>
+        <mxCell id="SMb" value="+ verify_token(token): dict" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="SM"><mxGeometry y="62" width="310" height="22" as="geometry"/></mxCell>
+        <mxCell id="SMc" value="+ hash_password(plain): str" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="SM"><mxGeometry y="84" width="310" height="22" as="geometry"/></mxCell>
+        <mxCell id="SMd" value="+ verify_password(plain, hashed): bool" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="SM"><mxGeometry y="106" width="310" height="22" as="geometry"/></mxCell>
+        <mxCell id="SMn" value="Algoritmo: HS256 + SECRET_KEY (env var)" style="text;strokeColor=none;fillColor=#fffacd;align=center;fontSize=10;fontStyle=2;" vertex="1" parent="SM"><mxGeometry y="135" width="310" height="35" as="geometry"/></mxCell>
+
+        <!-- DependenciesModule -->
+        <mxCell id="DEP" value="DependenciesModule (core/dependencies.py)" style="swimlane;fontStyle=1;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1"><mxGeometry x="380" y="60" width="340" height="200" as="geometry"/></mxCell>
+        <mxCell id="DEPdiv" value="" style="line;strokeColor=#d6b656;" vertex="1" parent="DEP"><mxGeometry y="30" width="340" height="10" as="geometry"/></mxCell>
+        <mxCell id="DEPa" value="+ get_current_user(token, session): User" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="DEP"><mxGeometry y="40" width="340" height="22" as="geometry"/></mxCell>
+        <mxCell id="DEPb" value="+ get_current_tenant(user, cache): Tenant" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="DEP"><mxGeometry y="62" width="340" height="22" as="geometry"/></mxCell>
+        <mxCell id="DEPc" value="+ require_admin(user): User" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="DEP"><mxGeometry y="84" width="340" height="22" as="geometry"/></mxCell>
+        <mxCell id="DEPd" value="+ require_superadmin(user): User" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="DEP"><mxGeometry y="106" width="340" height="22" as="geometry"/></mxCell>
+        <mxCell id="DEPn" value="🔒 Inyectadas via Depends() en cada router&#xa;tenant_id siempre del JWT, nunca del body" style="text;strokeColor=none;fillColor=#fffacd;align=center;fontSize=10;fontStyle=2;" vertex="1" parent="DEP"><mxGeometry y="134" width="340" height="55" as="geometry"/></mxCell>
+
+        <!-- AuthRouter -->
+        <mxCell id="AR" value="AuthRouter (auth/router.py)" style="swimlane;fontStyle=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1"><mxGeometry x="780" y="60" width="300" height="110" as="geometry"/></mxCell>
+        <mxCell id="ARdiv" value="" style="line;strokeColor=#6c8ebf;" vertex="1" parent="AR"><mxGeometry y="30" width="300" height="10" as="geometry"/></mxCell>
+        <mxCell id="ARa" value="POST /auth/token" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="AR"><mxGeometry y="40" width="300" height="22" as="geometry"/></mxCell>
+        <mxCell id="ARb" value="  → login(email, password, session): Token" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="AR"><mxGeometry y="62" width="300" height="22" as="geometry"/></mxCell>
+
+        <!-- JWTPayload -->
+        <mxCell id="JWT" value="«dataclass» JWTPayload" style="swimlane;fontStyle=3;startSize=30;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1"><mxGeometry x="20" y="280" width="250" height="140" as="geometry"/></mxCell>
+        <mxCell id="JWTdiv" value="" style="line;strokeColor=#9673a6;" vertex="1" parent="JWT"><mxGeometry y="30" width="250" height="10" as="geometry"/></mxCell>
+        <mxCell id="JWTa" value="+ sub: str  (UUID del usuario)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="JWT"><mxGeometry y="40" width="250" height="22" as="geometry"/></mxCell>
+        <mxCell id="JWTb" value="+ role: str  (employee|admin|superadmin)" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="JWT"><mxGeometry y="62" width="250" height="22" as="geometry"/></mxCell>
+        <mxCell id="JWTc" value="+ tenant_id: UUID|None" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;fontStyle=1;" vertex="1" parent="JWT"><mxGeometry y="84" width="250" height="22" as="geometry"/></mxCell>
+        <mxCell id="JWTd" value="+ exp: int" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="JWT"><mxGeometry y="106" width="250" height="22" as="geometry"/></mxCell>
+
+        <!-- Token schema -->
+        <mxCell id="TK" value="«schema» Token" style="swimlane;fontStyle=3;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1"><mxGeometry x="320" y="300" width="220" height="100" as="geometry"/></mxCell>
+        <mxCell id="TKdiv" value="" style="line;strokeColor=#d6b656;" vertex="1" parent="TK"><mxGeometry y="30" width="220" height="10" as="geometry"/></mxCell>
+        <mxCell id="TKa" value="+ access_token: str" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="TK"><mxGeometry y="40" width="220" height="22" as="geometry"/></mxCell>
+        <mxCell id="TKb" value="+ token_type: str = 'bearer'" style="text;strokeColor=none;fillColor=none;align=left;spacingLeft=8;fontSize=11;" vertex="1" parent="TK"><mxGeometry y="62" width="220" height="22" as="geometry"/></mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="A1" value="usa" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" source="AR" target="SM" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="A2" value="usa" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" source="DEP" target="SM" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="A3" value="extrae" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" source="DEP" target="JWT" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="A4" value="retorna" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" source="AR" target="TK" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="Secuencia - Login JWT" id="seq_auth">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" pageWidth="1654" pageHeight="800">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="ttl" value="auth/ — Secuencia: Login y propagación del tenant_id (POST /auth/token)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=14;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="100" y="10" width="1200" height="35" as="geometry"/></mxCell>
+
+        <!-- Participants -->
+        <mxCell id="P0" value="Usuario" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="20" y="55" width="100" height="40" as="geometry"/></mxCell>
+        <mxCell id="P1" value="AuthRouter" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="180" y="55" width="110" height="40" as="geometry"/></mxCell>
+        <mxCell id="P2" value="UserRepository" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="360" y="55" width="120" height="40" as="geometry"/></mxCell>
+        <mxCell id="P3" value="SecurityModule" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="560" y="55" width="120" height="40" as="geometry"/></mxCell>
+        <mxCell id="P4" value="PostgreSQL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="760" y="55" width="110" height="40" as="geometry"/></mxCell>
+        <mxCell id="P5" value="Redis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="950" y="55" width="100" height="40" as="geometry"/></mxCell>
+
+        <!-- Lifelines -->
+        <mxCell id="L0" style="endArrow=none;dashed=1;html=1;strokeColor=#666;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="70" y="95" as="sourcePoint"/><mxPoint x="70" y="720" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L1" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="235" y="95" as="sourcePoint"/><mxPoint x="235" y="720" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L2" style="endArrow=none;dashed=1;html=1;strokeColor=#6c8ebf;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="420" y="95" as="sourcePoint"/><mxPoint x="420" y="720" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L3" style="endArrow=none;dashed=1;html=1;strokeColor=#d6b656;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="620" y="95" as="sourcePoint"/><mxPoint x="620" y="720" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L4" style="endArrow=none;dashed=1;html=1;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="815" y="95" as="sourcePoint"/><mxPoint x="815" y="720" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="L5" style="endArrow=none;dashed=1;html=1;strokeColor=#b85450;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1000" y="95" as="sourcePoint"/><mxPoint x="1000" y="720" as="targetPoint"/></mxGeometry></mxCell>
+
+        <!-- Messages -->
+        <mxCell id="m1" value="1. POST /auth/token {email, password}" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="70" y="130" as="sourcePoint"/><mxPoint x="235" y="130" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m2" value="2. get_by_email(email, session)" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="235" y="165" as="sourcePoint"/><mxPoint x="420" y="165" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m3" value="3. SELECT * FROM users WHERE email=:email" style="endArrow=block;endFill=1;html=1;fontSize=10;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="420" y="195" as="sourcePoint"/><mxPoint x="815" y="195" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m4" value="4. User {id, tenant_id, role, hashed_password}" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;strokeColor=#9673a6;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="815" y="225" as="sourcePoint"/><mxPoint x="420" y="225" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m5" value="5. User" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="420" y="250" as="sourcePoint"/><mxPoint x="235" y="250" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m6" value="6. verify_password(plain, hashed)" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="235" y="285" as="sourcePoint"/><mxPoint x="620" y="285" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m7" value="7. True ✅" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;strokeColor=#82b366;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="620" y="310" as="sourcePoint"/><mxPoint x="235" y="310" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m8" value="8. GET tenant:{tenant_id}:status" style="endArrow=block;endFill=1;html=1;fontSize=10;strokeColor=#b85450;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="235" y="345" as="sourcePoint"/><mxPoint x="1000" y="345" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m9" value="9. 'active'" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;strokeColor=#b85450;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1000" y="370" as="sourcePoint"/><mxPoint x="235" y="370" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m10" value="10. create_access_token(sub=user.id, role, tenant_id)" style="endArrow=block;endFill=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="235" y="410" as="sourcePoint"/><mxPoint x="620" y="410" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m11" value="11. JWT firmado HS256" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="620" y="435" as="sourcePoint"/><mxPoint x="235" y="435" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m12" value="12. HTTP 200 {access_token, token_type:'bearer'}" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;fontStyle=1;strokeColor=#82b366;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="235" y="475" as="sourcePoint"/><mxPoint x="70" y="475" as="targetPoint"/></mxGeometry></mxCell>
+
+        <!-- JWT Structure note -->
+        <mxCell id="jwt_note" value="JWT payload:&#xa;{ sub: user_id, role: 'admin', tenant_id: uuid, exp: ... }&#xa;tenant_id siempre del JWT — nunca del body (QAS-03)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="1100" y="250" width="360" height="75" as="geometry"/></mxCell>
+
+        <!-- Redis fallback note -->
+        <mxCell id="redis_note" value="Si Redis no disponible → consulta SELECT is_active FROM tenants&#xa;directamente en PostgreSQL (CA-08 fallback graceful)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="1100" y="360" width="360" height="60" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
