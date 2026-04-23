@@ -43,15 +43,15 @@ services:
       - key: CORS_ORIGINS
         value: '["*"]'      # Ajustar con el dominio real en producción
 
+  # ── Redis 7 (Key-Value Store) ─────────────────────────────────────────────────
+  - type: redis
+    name: fastinventory-redis
+    plan: free              # 25 MB — suficiente para demo. Upstash para producción real.
+    ipAllowList: []         # Solo accesible desde servicios de Render (más seguro)
+
   # ── PostgreSQL 14 (Managed Database) ─────────────────────────────────────────
 databases:
   - name: fastinventory-db
     plan: free              # 1 GB de almacenamiento, región oregon
     databaseName: fastinventory_db
     user: fastinventory_user
-
-  # ── Redis 7 (Key-Value Store) ─────────────────────────────────────────────────
-  - type: redis
-    name: fastinventory-redis
-    plan: free              # 25 MB — suficiente para demo. Upstash para producción real.
-    ipAllowList: []         # Solo accesible desde servicios de Render (más seguro)
