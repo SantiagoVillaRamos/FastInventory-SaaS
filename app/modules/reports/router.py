@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.dependencies import get_db, get_current_tenant
+from app.core.dependencies import get_current_tenant, get_db
 from app.modules.reports.schemas import ReportRead
 from app.modules.reports.service import ReportService
 

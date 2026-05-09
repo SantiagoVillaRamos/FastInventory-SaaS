@@ -4,9 +4,9 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.dependencies import get_db
-from app.core.security import verify_password, create_access_token
-from app.modules.users.models import User
+from app.core.security import create_access_token, verify_password
 from app.modules.auth.schemas import Token
+from app.modules.users.models import User
 
 router = APIRouter()
 

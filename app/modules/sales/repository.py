@@ -1,9 +1,11 @@
 from uuid import UUID
+
 from sqlalchemy import select
-from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.modules.sales.models import Sale, SaleItem
+
 
 class SaleRepository:
     

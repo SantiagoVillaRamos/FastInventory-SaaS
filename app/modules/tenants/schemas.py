@@ -1,7 +1,9 @@
+import re
 import uuid
 from datetime import datetime
+
 from pydantic import BaseModel, EmailStr, Field, field_validator
-import re
+
 from app.modules.tenants.models import PlanEnum
 
 

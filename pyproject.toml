@@ -1,0 +1,54 @@
+[project]
+name = "fastinventory-saas"
+version = "2.0.0"
+description = "Plataforma Multi-Tenant SaaS de Gestión de Inventario"
+requires-python = ">=3.11"
+
+# ── Ruff: Linter + Formatter ─────────────────────────────────────────────────
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+src = ["app"]
+
+# Excluir archivos generados o de terceros
+exclude = [
+    "alembic/versions/*.py",
+    ".venv",
+    "__pycache__",
+    "*.pyc",
+]
+
+[tool.ruff.lint]
+# Reglas activas:
+# E  = errores de estilo (pycodestyle)
+# F  = errores lógicos (pyflakes)
+# I  = orden de imports (isort)
+# UP = upgrades de sintaxis a Python moderno
+# B  = detección de bugs comunes (flake8-bugbear)
+# SIM = simplificaciones de código
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+# Ignorar reglas que chocan con nuestro estilo o framework
+ignore = [
+    "E501",   # Longitud de línea (controlada por line-length arriba)
+    "E402",   # Imports no al inicio del archivo (main.py intercala imports con include_router)
+    "E712",   # == True/False es REQUERIDO por SQLAlchemy para generar SQL correcto
+    "B008",   # Depends() en parámetros de función (patrón estándar de FastAPI)
+    "B904",   # raise from dentro de except (no aplica en handlers HTTP)
+    "UP007",  # X | Y vs Optional[X] (mantener compatibilidad explícita)
+    "UP042",  # StrEnum no es compatible con SQLAlchemy Enum mapping en PostgreSQL
+    "SIM105", # contextlib.suppress vs try/except/pass (preferimos explícito en Redis)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+
+# ── Pytest ────────────────────────────────────────────────────────────────────
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

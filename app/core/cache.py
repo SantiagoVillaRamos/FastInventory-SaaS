@@ -1,4 +1,5 @@
 import redis.asyncio as aioredis
+
 from app.core.config import settings
 
 # Cliente global inicializado en el lifespan de main.py

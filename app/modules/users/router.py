@@ -1,6 +1,6 @@
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List
 
 from app.core.dependencies import get_db, require_admin
 from app.modules.users.schemas import UserCreate, UserRead, UserUpdate
@@ -22,7 +22,7 @@ async def create_user(
     return await UserService.create_user(current_user["tenant_id"], data, db)
 
 
-@router.get("/", response_model=List[UserRead], tags=["Users"])
+@router.get("/", response_model=list[UserRead], tags=["Users"])
 async def list_users(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(require_admin)

@@ -1,21 +1,21 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime
 from uuid import UUID
-from fastapi import HTTPException, status
-from sqlalchemy import select, func
-from sqlalchemy.ext.asyncio import AsyncSession
-import redis.asyncio as aioredis
-from typing import List
 
-from app.modules.tenants.models import Tenant, PlanEnum
-from app.modules.sales.models import Sale
+import redis.asyncio as aioredis
+from fastapi import HTTPException
+from sqlalchemy import func, select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.modules.admin.models import PlanAuditLog
-from app.modules.admin.schemas import TenantAdminRead, MetricsRead, PlanChangeRequest
+from app.modules.admin.schemas import MetricsRead, PlanChangeRequest, TenantAdminRead
+from app.modules.sales.models import Sale
+from app.modules.tenants.models import Tenant
 
 
 class AdminService:
 
     @staticmethod
-    async def list_tenants(session: AsyncSession) -> List[TenantAdminRead]:
+    async def list_tenants(session: AsyncSession) -> list[TenantAdminRead]:
         """RF-07: Lista TODOS los tenants sin filtro (excepción documentada para super-admins)."""
         stmt = select(Tenant).order_by(Tenant.created_at.desc())
         result = await session.execute(stmt)
@@ -94,7 +94,7 @@ class AdminService:
         suspended_count = (await session.execute(stmt_suspended)).scalar_one()
 
         # Volumen diario (ventas de HOY en TODA la plataforma)
-        today_start = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+        today_start = datetime.now(UTC).replace(hour=0, minute=0, second=0, microsecond=0)
         stmt_vol = select(func.coalesce(func.sum(Sale.total), 0)).where(Sale.created_at >= today_start)
         daily_volume = float((await session.execute(stmt_vol)).scalar_one())
 

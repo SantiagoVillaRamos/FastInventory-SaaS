@@ -1,12 +1,13 @@
 import json
 from uuid import UUID
+
+import redis.asyncio as aioredis
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-import redis.asyncio as aioredis
-from typing import List
 
 from app.modules.categories.models import Category
 from app.modules.categories.schemas import CategoryRead
+
 
 class CategoryRepository:
     
@@ -31,7 +32,7 @@ class CategoryRepository:
         return result.scalar_one_or_none()
 
     @staticmethod
-    async def list_cached(tenant_id: str, session: AsyncSession, cache: aioredis.Redis) -> List[CategoryRead]:
+    async def list_cached(tenant_id: str, session: AsyncSession, cache: aioredis.Redis) -> list[CategoryRead]:
         """QAS-04 y CA-08: Lista categorías desde Caché. Si falla Redis, va a DB."""
         key = CategoryRepository._cache_key(tenant_id)
         

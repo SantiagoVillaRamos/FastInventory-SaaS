@@ -1,11 +1,11 @@
+
+import redis.asyncio as aioredis
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-import redis.asyncio as aioredis
-from typing import List
 
-from app.modules.sales.schemas import SaleCreate, SaleRead
-from app.modules.sales.repository import SaleRepository
 from app.modules.products.repository import ProductRepository
+from app.modules.sales.repository import SaleRepository
+from app.modules.sales.schemas import SaleCreate, SaleRead
 
 
 class SaleService:
@@ -62,6 +62,6 @@ class SaleService:
         return SaleRead.model_validate(sale)
 
     @staticmethod
-    async def list_sales(tenant_id: str, session: AsyncSession) -> List[SaleRead]:
+    async def list_sales(tenant_id: str, session: AsyncSession) -> list[SaleRead]:
         sales = await SaleRepository.list_by_tenant(tenant_id, session)
         return [SaleRead.model_validate(s) for s in sales]

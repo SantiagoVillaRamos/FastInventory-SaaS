@@ -1,17 +1,17 @@
-from fastapi import APIRouter, Depends, status
-from sqlalchemy.ext.asyncio import AsyncSession
-import redis.asyncio as aioredis
-from typing import List
 
-from app.core.dependencies import get_db, get_cache, require_superadmin
-from app.modules.admin.schemas import TenantAdminRead, MetricsRead, PlanChangeRequest
+import redis.asyncio as aioredis
+from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.core.dependencies import get_cache, get_db, require_superadmin
+from app.modules.admin.schemas import MetricsRead, PlanChangeRequest, TenantAdminRead
 from app.modules.admin.service import AdminService
 
 # Todos los endpoints requieren el rol superadmin
 router = APIRouter(dependencies=[Depends(require_superadmin)])
 
 
-@router.get("/tenants", response_model=List[TenantAdminRead], tags=["Admin"])
+@router.get("/tenants", response_model=list[TenantAdminRead], tags=["Admin"])
 async def list_all_tenants(db: AsyncSession = Depends(get_db)):
     """RF-07: Lista absolutamente todos los tenants de la plataforma (sin filtro de tenant)."""
     return await AdminService.list_tenants(db)

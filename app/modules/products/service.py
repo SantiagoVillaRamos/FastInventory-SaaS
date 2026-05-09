@@ -1,13 +1,14 @@
+
+import redis.asyncio as aioredis
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-import redis.asyncio as aioredis
-from typing import List
 
-from app.modules.products.schemas import ProductCreate, ProductRead, ProductUpdate
-from app.modules.products.repository import ProductRepository
 from app.modules.categories.repository import CategoryRepository
-from app.modules.tenants.repository import TenantRepository
+from app.modules.products.repository import ProductRepository
+from app.modules.products.schemas import ProductCreate, ProductRead, ProductUpdate
 from app.modules.tenants.models import PlanEnum
+from app.modules.tenants.repository import TenantRepository
+
 
 class ProductService:
     PLAN_LIMITS = {
@@ -42,7 +43,7 @@ class ProductService:
         return ProductRead.model_validate(product)
 
     @staticmethod
-    async def list_products(tenant_id: str, session: AsyncSession, cache: aioredis.Redis, search: str | None = None, category_id: str | None = None) -> List[ProductRead]:
+    async def list_products(tenant_id: str, session: AsyncSession, cache: aioredis.Redis, search: str | None = None, category_id: str | None = None) -> list[ProductRead]:
         return await ProductRepository.list_cached(tenant_id, session, cache, search, category_id)
 
     @staticmethod

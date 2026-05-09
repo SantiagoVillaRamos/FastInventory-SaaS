@@ -1,12 +1,13 @@
 import json
 from uuid import UUID
-from sqlalchemy import select, func
-from sqlalchemy.ext.asyncio import AsyncSession
+
 import redis.asyncio as aioredis
-from typing import List
+from sqlalchemy import func, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.modules.products.models import Product
 from app.modules.products.schemas import ProductRead
+
 
 class ProductRepository:
     
@@ -33,7 +34,7 @@ class ProductRepository:
         return result.scalar_one_or_none()
 
     @staticmethod
-    async def list_cached(tenant_id: str, session: AsyncSession, cache: aioredis.Redis, search: str | None = None, category_id: str | None = None) -> List[ProductRead]:
+    async def list_cached(tenant_id: str, session: AsyncSession, cache: aioredis.Redis, search: str | None = None, category_id: str | None = None) -> list[ProductRead]:
         key = ProductRepository._cache_key(tenant_id, search, category_id)
         
         try:

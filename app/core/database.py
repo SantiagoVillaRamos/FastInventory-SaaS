@@ -1,9 +1,10 @@
 from sqlalchemy.ext.asyncio import (
-    create_async_engine,
     AsyncSession,
     async_sessionmaker,
+    create_async_engine,
 )
 from sqlalchemy.orm import DeclarativeBase
+
 from app.core.config import settings
 
 # Motor async — pool_pre_ping verifica la conexión antes de usarla

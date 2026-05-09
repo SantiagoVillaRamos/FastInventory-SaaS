@@ -1,16 +1,16 @@
-from fastapi import APIRouter, Depends, status, Query
-from sqlalchemy.ext.asyncio import AsyncSession
-import redis.asyncio as aioredis
-from typing import List
 
-from app.core.dependencies import get_db, get_cache, get_current_tenant
+import redis.asyncio as aioredis
+from fastapi import APIRouter, Depends, Query, status
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.core.dependencies import get_cache, get_current_tenant, get_db
 from app.modules.products.schemas import ProductCreate, ProductRead, ProductUpdate
 from app.modules.products.service import ProductService
 
 # Cualquier usuario autenticado (empleado o admin) asociado al tenant puede acceder a productos.
 router = APIRouter(dependencies=[Depends(get_current_tenant)])
 
-@router.get("/", response_model=List[ProductRead], tags=["Products"])
+@router.get("/", response_model=list[ProductRead], tags=["Products"])
 async def list_products(
     search: str | None = Query(None, description="Búsqueda por nombre ILIKE"),
     category_id: str | None = Query(None, description="Filtrar por categoría"),

@@ -1,9 +1,10 @@
 import enum
 import uuid
-from datetime import datetime, timezone
-from sqlalchemy import String, Boolean, DateTime, Enum
-from sqlalchemy.orm import Mapped, mapped_column
+from datetime import UTC, datetime
+
+from sqlalchemy import Boolean, DateTime, Enum, String
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.database import Base
 
@@ -25,5 +26,5 @@ class Tenant(Base):
     plan: Mapped[PlanEnum] = mapped_column(Enum(PlanEnum), default=PlanEnum.FREE, nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
+        DateTime(timezone=True), default=lambda: datetime.now(UTC)
     )

@@ -1,7 +1,8 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
+
+import bcrypt
 from fastapi import HTTPException, status
 from jose import JWTError, jwt
-import bcrypt
 
 from app.core.config import settings
 
@@ -26,7 +27,7 @@ def create_access_token(
     Returns:
         JWT en formato string.
     """
-    expire = datetime.now(timezone.utc) + timedelta(
+    expire = datetime.now(UTC) + timedelta(
         minutes=settings.access_token_expire_minutes
     )
     payload = {

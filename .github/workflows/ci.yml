@@ -7,9 +7,29 @@ on:
     branches: [ main ]
 
 jobs:
-  lint-and-test:
-    name: Lint & Test
+  lint:
+    name: Lint (Ruff)
     runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Instalar uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Configurar Python 3.11
+        run: uv python install 3.11
+
+      - name: Verificar código con Ruff
+        run: |
+          uv tool run ruff check app/
+          uv tool run ruff format --check app/
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: lint
 
     services:
       postgres:
@@ -40,19 +60,14 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v4
 
+      - name: Instalar uv
+        uses: astral-sh/setup-uv@v4
+
       - name: Configurar Python 3.11
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          cache: 'pip'
+        run: uv python install 3.11
 
       - name: Instalar dependencias
-        run: pip install -r requirements.txt
-
-      - name: Verificar sintaxis con Ruff
-        run: |
-          pip install ruff
-          ruff check app/
+        run: uv pip install --system -r requirements.txt
 
       - name: Ejecutar migraciones
         env:
@@ -69,5 +84,5 @@ jobs:
           SECRET_KEY: ci-secret-key-for-testing-only
           ACCESS_TOKEN_EXPIRE_MINUTES: 30
         run: |
-          pip install pytest pytest-asyncio httpx
+          uv pip install --system pytest pytest-asyncio httpx
           pytest tests/ -v --tb=short

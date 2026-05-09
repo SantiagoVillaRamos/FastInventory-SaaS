@@ -1,8 +1,10 @@
 from uuid import UUID
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.modules.tenants.models import Tenant
+
 
 class TenantRepository:
     

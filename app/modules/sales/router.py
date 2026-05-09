@@ -1,9 +1,9 @@
+
+import redis.asyncio as aioredis
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
-import redis.asyncio as aioredis
-from typing import List
 
-from app.core.dependencies import get_db, get_cache, get_current_tenant
+from app.core.dependencies import get_cache, get_current_tenant, get_db
 from app.modules.sales.schemas import SaleCreate, SaleRead
 from app.modules.sales.service import SaleService
 
@@ -22,7 +22,7 @@ async def create_sale(
     return await SaleService.create_sale(current_user["id"], seller_id, data, db, cache)
 
 
-@router.get("/", response_model=List[SaleRead], tags=["Sales"])
+@router.get("/", response_model=list[SaleRead], tags=["Sales"])
 async def list_sales(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_tenant)

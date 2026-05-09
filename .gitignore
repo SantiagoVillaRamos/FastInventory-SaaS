@@ -24,6 +24,9 @@ alembic/versions/*.pyc
 
 # Tests
 .pytest_cache/
+
+# Ruff
+.ruff_cache/
 .coverage
 htmlcov/
 
@@ -41,3 +44,11 @@ htmlcov/
 
 # Logs
 *.log
+
+# ========================
+# Documentación del proyecto (solo local, NO va a GitHub)
+# ========================
+architecture/
+docs/
+# Excepción: el logo sí sube porque lo usa el README.md
+!docs/logo.png

@@ -1,10 +1,11 @@
+
+import redis.asyncio as aioredis
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-import redis.asyncio as aioredis
-from typing import List
 
-from app.modules.categories.schemas import CategoryCreate, CategoryRead, CategoryUpdate
 from app.modules.categories.repository import CategoryRepository
+from app.modules.categories.schemas import CategoryCreate, CategoryRead, CategoryUpdate
+
 
 class CategoryService:
     @staticmethod
@@ -15,7 +16,7 @@ class CategoryService:
         return CategoryRead.model_validate(category)
 
     @staticmethod
-    async def list_categories(tenant_id: str, session: AsyncSession, cache: aioredis.Redis) -> List[CategoryRead]:
+    async def list_categories(tenant_id: str, session: AsyncSession, cache: aioredis.Redis) -> list[CategoryRead]:
         return await CategoryRepository.list_cached(tenant_id, session, cache)
 
     @staticmethod

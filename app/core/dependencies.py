@@ -10,14 +10,15 @@ Patrón de uso en cualquier router:
         ...  # tenant["id"] siempre disponible y validado
 """
 
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator
+
+import redis.asyncio as aioredis
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
-import redis.asyncio as aioredis
 
-from app.core.database import AsyncSessionLocal
 from app.core.cache import get_cache_client
+from app.core.database import AsyncSessionLocal
 from app.core.security import verify_token
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")

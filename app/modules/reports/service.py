@@ -1,14 +1,15 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from uuid import UUID
+
 from fastapi import HTTPException, status
-from sqlalchemy import select, func, and_
+from sqlalchemy import and_, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.modules.sales.models import Sale, SaleItem
 from app.modules.products.models import Product
-from app.modules.tenants.repository import TenantRepository
+from app.modules.reports.schemas import ReportItemRead, ReportRead
+from app.modules.sales.models import Sale, SaleItem
 from app.modules.tenants.models import PlanEnum
-from app.modules.reports.schemas import ReportRead, ReportItemRead
+from app.modules.tenants.repository import TenantRepository
 
 
 class ReportService:
@@ -71,7 +72,7 @@ class ReportService:
     @staticmethod
     async def get_daily_report(tenant_id: str, session: AsyncSession) -> ReportRead:
         """Reporte del día de hoy. Disponible para todos los planes."""
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         since = now.replace(hour=0, minute=0, second=0, microsecond=0)
         until = since + timedelta(days=1)
         return await ReportService._build_report(tenant_id, since, until, session)
@@ -80,7 +81,7 @@ class ReportService:
     async def get_biweekly_report(tenant_id: str, session: AsyncSession) -> ReportRead:
         """Últimos 15 días. Solo plan Basic y Pro."""
         await ReportService._require_plan(tenant_id, [PlanEnum.BASIC, PlanEnum.PRO], session)
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         since = now - timedelta(days=15)
         until = now
         return await ReportService._build_report(tenant_id, since, until, session)
@@ -89,7 +90,7 @@ class ReportService:
     async def get_monthly_report(tenant_id: str, session: AsyncSession) -> ReportRead:
         """Últimos 30 días. Solo plan Basic y Pro."""
         await ReportService._require_plan(tenant_id, [PlanEnum.BASIC, PlanEnum.PRO], session)
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         since = now - timedelta(days=30)
         until = now
         return await ReportService._build_report(tenant_id, since, until, session)

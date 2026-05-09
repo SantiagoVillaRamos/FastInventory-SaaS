@@ -1,16 +1,16 @@
+
+import redis.asyncio as aioredis
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
-import redis.asyncio as aioredis
-from typing import List
 
-from app.core.dependencies import get_db, get_cache, get_current_tenant, require_admin
+from app.core.dependencies import get_cache, get_current_tenant, get_db, require_admin
 from app.modules.categories.schemas import CategoryCreate, CategoryRead, CategoryUpdate
 from app.modules.categories.service import CategoryService
 
 # Empleados pueden VER categorías, Admins pueden CREAR/EDITAR/BORRAR.
 router = APIRouter()
 
-@router.get("/", response_model=List[CategoryRead], tags=["Categories"])
+@router.get("/", response_model=list[CategoryRead], tags=["Categories"])
 async def list_categories(
     db: AsyncSession = Depends(get_db),
     cache: aioredis.Redis = Depends(get_cache),

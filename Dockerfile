@@ -7,9 +7,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc libpq-dev && \
     rm -rf /var/lib/apt/lists/*
 
-# Instalar dependencias Python
+# Instalar uv (gestor de paquetes ultrarrápido) y dependencias Python
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir uv && \
+    uv pip install --no-cache --system -r requirements.txt
 
 # Copiar el código fuente
 COPY . .
