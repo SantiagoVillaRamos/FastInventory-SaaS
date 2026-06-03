@@ -1,0 +1,40 @@
+<!-- Dashboard Module — modules/dashboard/dashboard.html -->
+<div class="app-main__header">
+  <h1 class="app-main__title">Dashboard</h1>
+  <p class="app-main__subtitle">Resumen de tu negocio</p>
+</div>
+
+<div class="dash-info-grid">
+  <div class="dash-card">
+    <div class="dash-card__icon">👤</div>
+    <div class="dash-card__content">
+      <span class="dash-card__label">Rol</span>
+      <span class="dash-card__value" id="dashRole">—</span>
+    </div>
+  </div>
+
+  <div class="dash-card">
+    <div class="dash-card__icon">🏪</div>
+    <div class="dash-card__content">
+      <span class="dash-card__label">Tenant ID</span>
+      <span class="dash-card__value dash-card__value--mono" id="dashTenant">—</span>
+    </div>
+  </div>
+
+  <div class="dash-card">
+    <div class="dash-card__icon">⏱️</div>
+    <div class="dash-card__content">
+      <span class="dash-card__label">Sesión expira en</span>
+      <span class="dash-card__value" id="dashExpires">—</span>
+    </div>
+  </div>
+</div>
+
+<div class="dash-next-steps">
+  <h2>Próximos pasos</h2>
+  <p>
+    Este dashboard mostrará métricas reales de tu negocio en la <strong>Feature F-27</strong>.
+    Por ahora, explora los módulos en la barra lateral o visita la documentación de la API.
+  </p>
+  <a href="/docs" target="_blank" class="btn btn--primary btn--lg">Abrir API Docs (Swagger)</a>
+</div>

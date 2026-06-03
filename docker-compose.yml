@@ -38,7 +38,7 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379" # Expuesto para inspección local
+      - "6380:6379" # 6380 externo → 6379 interno (evita conflicto con Redis del sistema)
     volumes:
       - redis_data:/data
     healthcheck:
