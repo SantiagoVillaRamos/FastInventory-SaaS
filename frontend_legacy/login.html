@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iniciar sesión — FastInventory SaaS</title>
+  <meta name="description"
+    content="Inicia sesión en tu cuenta de FastInventory para gestionar tu inventario y ventas." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Core CSS (Design System) -->
+  <link rel="stylesheet" href="core/css/reset.css" />
+  <link rel="stylesheet" href="core/css/components.css" />
+  <!-- Login-specific CSS -->
+  <link rel="stylesheet" href="public/login.css" />
+</head>
+
+<body class="page-login">
+
+  <!-- ── LOGIN CONTAINER ───────────────────────────────────────── -->
+  <div class="login-page">
+
+    <div class="login-card">
+      <div class="login-card__header">
+        <a href="/" class="nav__logo">
+          <span class="logo-icon">⚡</span>
+          <span>FastInventory</span>
+        </a>
+        <h1 class="login-card__title">Bienvenido de nuevo</h1>
+        <p class="login-card__subtitle">Ingresa tus credenciales para acceder a tu negocio</p>
+      </div>
+
+      <form class="login-form" id="loginForm" novalidate>
+        <div class="form-group" id="group-login_email">
+          <label for="login_email">Correo electrónico</label>
+          <input type="email" id="login_email" name="username" placeholder="pedro@mitienda.com" autocomplete="email"
+            required />
+          <span class="form-error" id="error-login_email"></span>
+        </div>
+
+        <div class="form-group" id="group-login_password">
+          <label for="login_password">Contraseña</label>
+          <div class="input-password">
+            <input type="password" id="login_password" name="password" placeholder="Tu contraseña"
+              autocomplete="current-password" required />
+            <button type="button" class="password-toggle" id="toggleLoginPassword"
+              aria-label="Mostrar contraseña">👁</button>
+          </div>
+          <span class="form-error" id="error-login_password"></span>
+        </div>
+
+        <p class="form-error login-global-error" id="loginGlobalError"></p>
+
+        <button type="submit" class="btn btn--primary btn--full btn--lg" id="loginSubmitBtn">
+          <span class="btn__text">Iniciar sesión</span>
+          <span class="btn__spinner" hidden>
+            <svg class="spinner" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" stroke-dasharray="31.4"
+                stroke-linecap="round" />
+            </svg>
+          </span>
+        </button>
+      </form>
+
+      <div class="login-card__footer">
+        <p>¿No tienes cuenta? <a href="/#register">Registra tu negocio gratis</a></p>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="core/js/auth.js"></script>
+  <script>
+    /* ============================================================
+       F-26: Login Page Logic
+       ============================================================ */
+
+    const API_BASE = "http://localhost:8002";
+
+    // T-10: Si ya hay sesión activa, redirigir al SPA shell
+    if (auth.isAuthenticated()) {
+      window.location.href = "/app.html#dashboard";
+    }
+
+    // ── Elementos del DOM ──────────────────────────────────────
+    const loginForm = document.getElementById("loginForm");
+    const emailInput = document.getElementById("login_email");
+    const passwordInput = document.getElementById("login_password");
+    const globalError = document.getElementById("loginGlobalError");
+    const submitBtn = document.getElementById("loginSubmitBtn");
+    const togglePassword = document.getElementById("toggleLoginPassword");
+
+    // ── Toggle contraseña ──────────────────────────────────────
+    togglePassword.addEventListener("click", () => {
+      const isPassword = passwordInput.type === "password";
+      passwordInput.type = isPassword ? "text" : "password";
+      togglePassword.textContent = isPassword ? "🙈" : "👁";
+    });
+
+    // ── Utilidades ─────────────────────────────────────────────
+    function setLoading(loading) {
+      submitBtn.disabled = loading;
+      submitBtn.querySelector(".btn__text").hidden = loading;
+      submitBtn.querySelector(".btn__spinner").hidden = !loading;
+    }
+
+    function showError(fieldId, message) {
+      const group = document.getElementById(`group-${fieldId}`);
+      const error = document.getElementById(`error-${fieldId}`);
+      if (group) group.classList.add("has-error");
+      if (error) error.textContent = message;
+    }
+
+    function clearErrors() {
+      ["login_email", "login_password"].forEach((id) => {
+        const group = document.getElementById(`group-${id}`);
+        const error = document.getElementById(`error-${id}`);
+        if (group) group.classList.remove("has-error");
+        if (error) error.textContent = "";
+      });
+      globalError.textContent = "";
+    }
+
+    // ── Submit ─────────────────────────────────────────────────
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      clearErrors();
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      // Validación frontend
+      let valid = true;
+      if (!email) {
+        showError("login_email", "Ingresa tu correo electrónico.");
+        valid = false;
+      }
+      if (!password) {
+        showError("login_password", "Ingresa tu contraseña.");
+        valid = false;
+      }
+      if (!valid) return;
+
+      setLoading(true);
+
+      try {
+        // OAuth2 espera x-www-form-urlencoded con campos "username" y "password"
+        const body = new URLSearchParams();
+        body.append("username", email);
+        body.append("password", password);
+
+        const response = await fetch(`${API_BASE}/auth/token`, {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: body,
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          // ✅ Login exitoso — guardar token y redirigir
+          auth.saveToken(result.access_token);
+          window.location.href = "/app.html#dashboard";
+        } else {
+          // ⚠️ Error del servidor
+          const detail = result?.detail || "Error al iniciar sesión.";
+          globalError.textContent = detail;
+        }
+      } catch (err) {
+        console.error("Error de red:", err);
+        globalError.textContent = "No se pudo conectar con el servidor. Verifica tu conexión.";
+      } finally {
+        setLoading(false);
+      }
+    });
+  </script>
+
+</body>
+
+</html>

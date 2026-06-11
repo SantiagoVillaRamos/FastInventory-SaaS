@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FastInventory SaaS</title>
+  <meta name="description" content="Panel de control de FastInventory — gestiona tu inventario, ventas y equipo." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Core CSS (Design System) -->
+  <link rel="stylesheet" href="core/css/reset.css" />
+  <link rel="stylesheet" href="core/css/components.css" />
+  <link rel="stylesheet" href="core/css/layout.css" />
+</head>
+<body>
+
+  <!-- ── Mobile menu button ──────────────────────────────────── -->
+  <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menú">☰</button>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ── App Shell ───────────────────────────────────────────── -->
+  <div class="app-shell">
+
+    <!-- ── Sidebar nav ─────────────────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <a href="/" class="sidebar__logo">
+        <span class="logo-icon">⚡</span>
+        <span>FastInventory</span>
+      </a>
+
+      <nav class="sidebar__nav">
+        <a href="#dashboard" class="sidebar__link active" data-module="dashboard">
+          <span class="sidebar__link-icon">📊</span>
+          Dashboard
+        </a>
+        <a href="#catalog" class="sidebar__link" data-module="catalog">
+          <span class="sidebar__link-icon">📦</span>
+          Catálogo
+        </a>
+        <a href="#pos" class="sidebar__link" data-module="pos">
+          <span class="sidebar__link-icon">🛒</span>
+          Punto de Venta
+        </a>
+        <a href="#reports" class="sidebar__link" data-module="reports">
+          <span class="sidebar__link-icon">📈</span>
+          Reportes
+        </a>
+        <a href="#team" class="sidebar__link" data-module="team">
+          <span class="sidebar__link-icon">👥</span>
+          Equipo
+        </a>
+      </nav>
+
+      <div class="sidebar__divider"></div>
+
+      <div class="sidebar__footer">
+        <div class="sidebar__user">
+          <div class="sidebar__user-avatar" id="userAvatar">—</div>
+          <div class="sidebar__user-info">
+            <span class="sidebar__user-role" id="userRole">Cargando...</span>
+            <span class="sidebar__user-tenant" id="userTenant"></span>
+          </div>
+        </div>
+        <button class="sidebar__link" id="logoutBtn" style="color:var(--color-danger);">
+          <span class="sidebar__link-icon">🚪</span>
+          Cerrar sesión
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Main content area ─────────────────────────────────── -->
+    <main class="app-main" id="content">
+      <!-- Contenido cargado dinámicamente por router.js -->
+      <div class="empty-state">
+        <div class="empty-state__icon">⏳</div>
+        <p class="empty-state__title">Cargando...</p>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- ── Scripts (orden importa: auth → api → router → init) ── -->
+  <script src="core/js/auth.js"></script>
+  <script src="core/js/api.js"></script>
+  <script src="core/js/router.js"></script>
+  <script>
+    /* ============================================================
+       SPA Shell — Inicialización
+       ============================================================ */
+
+    // 1. Proteger ruta
+    auth.requireAuth();
+
+    // 2. Mostrar info del usuario en el sidebar
+    const payload = auth.getPayload();
+    if (payload) {
+      const roleMap = { admin: "Administrador", employee: "Empleado", superadmin: "Super Admin" };
+      const roleName = roleMap[payload.role] || payload.role;
+
+      document.getElementById("userRole").textContent = roleName;
+      document.getElementById("userAvatar").textContent = roleName.charAt(0);
+      document.getElementById("userTenant").textContent = payload.tenant_id
+        ? payload.tenant_id.substring(0, 8) + "…"
+        : "Sin tenant";
+      document.getElementById("userTenant").title = payload.tenant_id || "";
+    }
+
+    // 3. Logout
+    document.getElementById("logoutBtn").addEventListener("click", () => auth.logout());
+
+    // 4. Mobile menu
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("sidebarOverlay");
+    const menuBtn = document.getElementById("mobileMenuBtn");
+
+    menuBtn.addEventListener("click", () => {
+      sidebar.classList.toggle("open");
+      overlay.classList.toggle("open");
+    });
+    overlay.addEventListener("click", () => {
+      sidebar.classList.remove("open");
+      overlay.classList.remove("open");
+    });
+
+    // Cerrar sidebar al navegar (mobile)
+    document.querySelectorAll(".sidebar__link[data-module]").forEach((link) => {
+      link.addEventListener("click", () => {
+        if (window.innerWidth <= 768) {
+          sidebar.classList.remove("open");
+          overlay.classList.remove("open");
+        }
+      });
+    });
+
+    // 5. Inicializar router con los módulos registrados
+    router.init("content", {
+      dashboard: {
+        html: "modules/dashboard/dashboard.html",
+        css: "modules/dashboard/dashboard.css",
+        js: "modules/dashboard/dashboard.js",
+      },
+      catalog: {
+        html: "modules/catalog/catalog.html",
+        css: "modules/catalog/catalog.css",
+        js: "modules/catalog/catalog.js",
+      },
+      pos: {
+        html: "modules/pos/pos.html",
+        css: "modules/pos/pos.css",
+        js: "modules/pos/pos.js",
+      },
+      reports: {
+        html: "modules/reports/reports.html",
+        css: "modules/reports/reports.css",
+        js: "modules/reports/reports.js",
+      },
+      team: {
+        html: "modules/team/team.html",
+        css: "modules/team/team.css",
+        js: "modules/team/team.js",
+      },
+    });
+
+    // 6. Verificar expiración del token cada minuto
+    setInterval(() => {
+      const min = auth.getMinutesRemaining();
+      if (min !== null && min <= 0) auth.logout();
+    }, 60000);
+  </script>
+
+</body>
+</html>
