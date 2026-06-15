@@ -16,7 +16,7 @@ from app.core.database import Base
 from app.modules.tenants.models import Tenant
 from app.modules.users.models import User
 from app.modules.categories.models import Category
-from app.modules.products.models import Product
+from app.modules.products.models import Product, ProductVariant
 from app.modules.sales.models import Sale, SaleItem
 from app.modules.admin.models import PlanAuditLog
 from app.core.config import settings

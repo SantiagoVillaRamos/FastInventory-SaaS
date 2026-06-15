@@ -6,6 +6,8 @@ from pydantic import BaseModel, Field
 
 class SaleItemInput(BaseModel):
     product_id: uuid.UUID
+    # F-33: Si el producto tiene variantes, se especifica la variante exacta
+    variant_id: uuid.UUID | None = None
     quantity: int = Field(..., gt=0)
 
 class SaleCreate(BaseModel):
@@ -14,6 +16,7 @@ class SaleCreate(BaseModel):
 class SaleItemRead(BaseModel):
     id: uuid.UUID
     product_id: uuid.UUID
+    variant_id: uuid.UUID | None = None
     quantity: int
     unit_price: float
 

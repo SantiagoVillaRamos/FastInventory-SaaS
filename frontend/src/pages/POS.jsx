@@ -39,7 +39,15 @@ function SuccessModal({ total, itemCount, onClose }) {
 
 // ── Tarjeta de Producto ────────────────────────────────────────────────────
 function ProductCard({ product, onAdd }) {
-  const outOfStock = product.stock === 0;
+  // F-33: Para productos con variantes mostramos stock total y badge especial
+  const totalStock = product.has_variants
+    ? (product.variants || []).reduce((a, v) => a + v.stock, 0)
+    : product.stock;
+  const outOfStock = totalStock === 0;
+  const minPrice   = product.has_variants && product.variants?.length
+    ? Math.min(...product.variants.map(v => v.price))
+    : product.price;
+
   return (
     <button
       onClick={() => !outOfStock && onAdd(product)}
@@ -52,13 +60,18 @@ function ProductCard({ product, onAdd }) {
     >
       <div className="flex justify-between items-start gap-2 mb-3">
         <h3 className="text-sm font-semibold text-fi-navy leading-tight line-clamp-2">{product.name}</h3>
-        <span className={`flex-shrink-0 fi-badge-${product.stock === 0 ? 'danger' : product.stock <= 5 ? 'warning' : 'success'} text-xs`}>
-          {product.stock} {product.unit}
-        </span>
+        {product.has_variants
+          ? <span className="flex-shrink-0 fi-badge-warning text-xs">🎨 {(product.variants || []).length} var.</span>
+          : <span className={`flex-shrink-0 fi-badge-${outOfStock ? 'danger' : product.stock <= 5 ? 'warning' : 'success'} text-xs`}>{totalStock} {product.unit}</span>
+        }
       </div>
-      <p className="text-fi-blue font-bold text-base">{formatCOP(product.price)}</p>
+      <p className="text-fi-blue font-bold text-base">
+        {product.has_variants ? `Desde ${formatCOP(minPrice)}` : formatCOP(product.price)}
+      </p>
       {!outOfStock && (
-        <p className="text-fi-muted text-xs mt-2">Clic para agregar →</p>
+        <p className="text-fi-muted text-xs mt-2">
+          {product.has_variants ? 'Clic para elegir variante →' : 'Clic para agregar →'}
+        </p>
       )}
     </button>
   );
@@ -92,23 +105,64 @@ function CartItem({ item, onIncrease, onDecrease, onRemove }) {
   );
 }
 
+// ── Modal Selector de Variante (F-33) ─────────────────────────────────────
+function VariantModal({ product, onSelect, onClose }) {
+  return (
+    <div className="fi-modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
+      <div className="fi-modal max-w-md w-full">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-fi-border">
+          <div>
+            <h3 className="text-base font-semibold text-fi-navy">{product.name}</h3>
+            <p className="text-xs text-fi-muted mt-0.5">Selecciona una variante</p>
+          </div>
+          <button onClick={onClose} className="text-fi-muted hover:text-fi-navy text-xl">&times;</button>
+        </div>
+        <div className="px-6 py-4 grid grid-cols-2 gap-3 max-h-80 overflow-y-auto">
+          {(product.variants || []).filter(v => v.stock > 0).map(v => (
+            <button
+              key={v.id}
+              onClick={() => onSelect(product, v)}
+              className="p-3 rounded-xl border border-fi-border text-left hover:border-fi-blue hover:bg-fi-blue/5 transition-colors"
+            >
+              <p className="text-sm font-semibold text-fi-navy">{v.name}</p>
+              <p className="text-fi-blue font-bold text-sm mt-1">{formatCOP(v.price)}</p>
+              <p className="text-xs text-fi-muted mt-0.5">{v.stock} disponibles</p>
+            </button>
+          ))}
+          {(product.variants || []).filter(v => v.stock === 0).map(v => (
+            <div key={v.id} className="p-3 rounded-xl border border-fi-border opacity-40 cursor-not-allowed">
+              <p className="text-sm font-semibold text-fi-navy line-through">{v.name}</p>
+              <p className="text-xs text-red-400 mt-1">Sin stock</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ══════════════════════════════════════════════════════════════════════════════
 // ── POS Principal ─────────────────────────────────────────────────────────────
 // ══════════════════════════════════════════════════════════════════════════════
 export default function POS() {
-  const [products, setProducts]   = useState([]);
-  const [cartItems, setCartItems] = useState([]); // F30-T06
-  const [search, setSearch]       = useState('');
-  const [loading, setLoading]     = useState(true);
-  const [checking, setChecking]   = useState(false);
-  const [success, setSuccess]     = useState(null); // { total, itemCount }
+  const [products, setProducts]     = useState([]);
+  const [cartItems, setCartItems]   = useState([]);
+  const [search, setSearch]         = useState('');
+  const [loading, setLoading]       = useState(true);
+  const [checking, setChecking]     = useState(false);
+  const [success, setSuccess]       = useState(null);
+  const [variantModal, setVariantModal] = useState(null); // F-33: producto con variantes pendiente
 
-  // F30-T04: Cargar productos con stock > 0
+  // F30-T04: Cargar productos con stock disponible
   const loadProducts = useCallback(async () => {
     setLoading(true);
     try {
       const res = await api.get('/products/');
-      setProducts(res.data.filter((p) => p.stock > 0));
+      // F-33: Para productos con variantes, calcular stock total; para simples usar stock directo
+      setProducts(res.data.filter((p) => {
+        if (p.has_variants) return (p.variants || []).some(v => v.stock > 0);
+        return p.stock > 0;
+      }));
     } catch { /* interceptor maneja 401 */ }
     finally { setLoading(false); }
   }, []);
@@ -120,15 +174,38 @@ export default function POS() {
     p.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  // F30-T06: addToCart — agrega o incrementa ítem
+  // F30-T06 / F-33: addToCart — si el producto tiene variantes abre el modal selector
   const addToCart = (product) => {
+    if (product.has_variants) {
+      setVariantModal(product);
+      return;
+    }
+    addSimpleToCart(product, null);
+  };
+
+  // Agrega al carrito un producto simple o con variante ya seleccionada
+  const addSimpleToCart = (product, variant) => {
+    // El id del item en carrito es: variant.id si hay variante, o product.id si es simple
+    const itemId    = variant ? `${product.id}::${variant.id}` : product.id;
+    const itemName  = variant ? `${product.name} — ${variant.name}` : product.name;
+    const itemPrice = variant ? variant.price : product.price;
+    const itemStock = variant ? variant.stock : product.stock;
+
     setCartItems((prev) => {
-      const exists = prev.find((i) => i.id === product.id);
+      const exists = prev.find((i) => i.id === itemId);
       if (exists) {
-        if (exists.quantity >= product.stock) return prev; // límite de stock
-        return prev.map((i) => i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i);
+        if (exists.quantity >= itemStock) return prev;
+        return prev.map((i) => i.id === itemId ? { ...i, quantity: i.quantity + 1 } : i);
       }
-      return [...prev, { ...product, quantity: 1 }];
+      return [...prev, {
+        id: itemId,
+        product_id: product.id,
+        variant_id: variant?.id || null,
+        name: itemName,
+        price: itemPrice,
+        stock: itemStock,
+        quantity: 1,
+      }];
     });
   };
 
@@ -146,13 +223,17 @@ export default function POS() {
   const iva      = subtotal * IVA;
   const total    = subtotal + iva;
 
-  // F30-T09: checkout() — POST /sales/
+  // F30-T09 / F-33: checkout() — POST /sales/ con variant_id si aplica
   const checkout = async () => {
     if (cartItems.length === 0) return;
     setChecking(true);
     try {
       const payload = {
-        items: cartItems.map((i) => ({ product_id: i.id, quantity: i.quantity })),
+        items: cartItems.map((i) => ({
+          product_id: i.product_id || i.id,
+          variant_id: i.variant_id || null,
+          quantity: i.quantity,
+        })),
       };
       await api.post('/sales/', payload);
       setSuccess({ total, itemCount: cartItems.reduce((a, i) => a + i.quantity, 0) });
@@ -266,6 +347,18 @@ export default function POS() {
           </div>
         </div>
       </div>
+
+      {/* F-33: Modal selector de variante */}
+      {variantModal && (
+        <VariantModal
+          product={variantModal}
+          onSelect={(product, variant) => {
+            addSimpleToCart(product, variant);
+            setVariantModal(null);
+          }}
+          onClose={() => setVariantModal(null)}
+        />
+      )}
 
       {/* F30-T10: Modal de éxito */}
       {success && (

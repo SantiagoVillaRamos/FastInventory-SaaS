@@ -4,13 +4,14 @@ from uuid import UUID
 import redis.asyncio as aioredis
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
-from app.modules.products.models import Product
-from app.modules.products.schemas import ProductRead
+from app.modules.products.models import Product, ProductVariant
+from app.modules.products.schemas import ProductRead, VariantCreate
 
 
 class ProductRepository:
-    
+
     @staticmethod
     def _cache_key(tenant_id: str, search: str | None, category_id: str | None) -> str:
         s = search or "all"
@@ -19,16 +20,31 @@ class ProductRepository:
 
     @staticmethod
     async def create(tenant_id: str, data: dict, session: AsyncSession) -> Product:
+        # Separar variantes del dict principal para no pasarlas al constructor de Product
+        variants_data: list[dict] = data.pop("variants", None) or []
+        # has_variants puede venir del dict; si no, default False
         product = Product(tenant_id=UUID(tenant_id), **data)
         session.add(product)
+        await session.flush()  # Obtener ID antes de crear variantes
+
+        for v in variants_data:
+            variant = ProductVariant(product_id=product.id, **v)
+            session.add(variant)
+
         await session.flush()
+        # Recargar variantes en memoria para la respuesta
+        await session.refresh(product, ["variants"])
         return product
 
     @staticmethod
     async def get_by_id(product_id: str, tenant_id: str, session: AsyncSession) -> Product | None:
-        stmt = select(Product).where(
-            Product.id == UUID(product_id),
-            Product.tenant_id == UUID(tenant_id)
+        stmt = (
+            select(Product)
+            .options(selectinload(Product.variants))
+            .where(
+                Product.id == UUID(product_id),
+                Product.tenant_id == UUID(tenant_id),
+            )
         )
         result = await session.execute(stmt)
         return result.scalar_one_or_none()
@@ -36,34 +52,38 @@ class ProductRepository:
     @staticmethod
     async def list_cached(tenant_id: str, session: AsyncSession, cache: aioredis.Redis, search: str | None = None, category_id: str | None = None) -> list[ProductRead]:
         key = ProductRepository._cache_key(tenant_id, search, category_id)
-        
+
         try:
             cached_data = await cache.get(key)
             if cached_data:
                 return [ProductRead(**p) for p in json.loads(cached_data)]
         except aioredis.RedisError:
             pass
-        
-        stmt = select(Product).where(Product.tenant_id == UUID(tenant_id))
-        
+
+        stmt = (
+            select(Product)
+            .options(selectinload(Product.variants))
+            .where(Product.tenant_id == UUID(tenant_id))
+        )
+
         if category_id:
             stmt = stmt.where(Product.category_id == UUID(category_id))
-            
+
         if search:
             stmt = stmt.where(Product.name.ilike(f"%{search}%"))
-            
+
         stmt = stmt.order_by(Product.name)
         result = await session.execute(stmt)
         products = result.scalars().all()
-        
+
         products_read = [ProductRead.model_validate(p) for p in products]
-        
+
         try:
             data_to_cache = [p.model_dump(mode="json") for p in products_read]
             await cache.set(key, json.dumps(data_to_cache), ex=60)
         except aioredis.RedisError:
             pass
-            
+
         return products_read
 
     @staticmethod
@@ -83,7 +103,7 @@ class ProductRepository:
             await session.flush()
             return True
         return False
-        
+
     @staticmethod
     async def count_by_tenant(tenant_id: str, session: AsyncSession) -> int:
         stmt = select(func.count(Product.id)).where(Product.tenant_id == UUID(tenant_id))
@@ -91,8 +111,28 @@ class ProductRepository:
         return result.scalar_one()
 
     @staticmethod
-    async def decrement_stock(product_id: str, tenant_id: str, quantity: int, session: AsyncSession) -> bool:
-        """QAS-01: Decremento atómico en PostgreSQL para ventas seguras"""
+    async def decrement_stock(
+        product_id: str,
+        tenant_id: str,
+        quantity: int,
+        session: AsyncSession,
+        variant_id: UUID | None = None,
+    ) -> bool:
+        """QAS-01 / F-33: Decremento atómico. Si hay variant_id, descuenta de la variante."""
+        if variant_id:
+            stmt = select(ProductVariant).where(
+                ProductVariant.id == variant_id,
+                ProductVariant.product_id == UUID(product_id),
+            )
+            result = await session.execute(stmt)
+            variant = result.scalar_one_or_none()
+            if variant and variant.stock >= quantity:
+                variant.stock -= quantity
+                await session.flush()
+                return True
+            return False
+
+        # Producto simple (sin variantes)
         product = await ProductRepository.get_by_id(product_id, tenant_id, session)
         if product and product.stock >= quantity:
             product.stock -= quantity
@@ -101,21 +141,87 @@ class ProductRepository:
         return False
 
     @staticmethod
+    async def increment_stock(
+        product_id: UUID,
+        tenant_id: UUID,
+        quantity: int,
+        session: AsyncSession,
+        variant_id: UUID | None = None,
+    ) -> bool:
+        """F-32 / F-33: Incremento atómico. Si hay variant_id, incrementa la variante."""
+        if variant_id:
+            stmt = select(ProductVariant).where(
+                ProductVariant.id == variant_id,
+                ProductVariant.product_id == product_id,
+            )
+            result = await session.execute(stmt)
+            variant = result.scalar_one_or_none()
+            if not variant:
+                return False
+            variant.stock += quantity
+            await session.flush()
+            return True
+
+        # Producto simple — valida que pertenezca al tenant
+        stmt = select(Product).where(
+            Product.id == product_id,
+            Product.tenant_id == tenant_id,
+        )
+        result = await session.execute(stmt)
+        product = result.scalar_one_or_none()
+        if not product:
+            return False
+        product.stock += quantity
+        await session.flush()
+        return True
+
+    @staticmethod
     async def invalidate_cache(tenant_id: str, cache: aioredis.Redis) -> None:
-        """Invalida TODA la caché de productos de un tenant (incluyendo búsquedas), eliminando la sub-jerarquía en Redis."""
+        """Invalida TODA la caché de productos de un tenant."""
         try:
             cursor = 0
             match_pattern = f"tenant:{tenant_id}:products:*"
             keys_to_delete = []
-            
+
             while True:
                 cursor, keys = await cache.scan(cursor=cursor, match=match_pattern, count=100)
                 if keys:
                     keys_to_delete.extend(keys)
                 if cursor == 0:
                     break
-                    
+
             if keys_to_delete:
                 await cache.delete(*keys_to_delete)
         except aioredis.RedisError:
             pass
+
+    # ── F-33: Gestión directa de variantes ────────────────────────────────────
+
+    @staticmethod
+    async def add_variant(product_id: str, tenant_id: str, data: VariantCreate, session: AsyncSession) -> ProductVariant | None:
+        """Añade una nueva variante a un producto existente."""
+        product = await ProductRepository.get_by_id(product_id, tenant_id, session)
+        if not product:
+            return None
+        variant = ProductVariant(product_id=UUID(product_id), **data.model_dump())
+        session.add(variant)
+        await session.flush()
+        return variant
+
+    @staticmethod
+    async def get_variant(variant_id: str, product_id: str, session: AsyncSession) -> ProductVariant | None:
+        stmt = select(ProductVariant).where(
+            ProductVariant.id == UUID(variant_id),
+            ProductVariant.product_id == UUID(product_id),
+        )
+        result = await session.execute(stmt)
+        return result.scalar_one_or_none()
+
+    @staticmethod
+    async def delete_variant(variant_id: str, product_id: str, session: AsyncSession) -> bool:
+        variant = await ProductRepository.get_variant(variant_id, product_id, session)
+        if variant:
+            await session.delete(variant)
+            await session.flush()
+            return True
+        return False

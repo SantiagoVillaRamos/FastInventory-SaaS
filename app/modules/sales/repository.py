@@ -12,16 +12,17 @@ class SaleRepository:
     @staticmethod
     async def create_with_items(tenant_id: str, seller_id: str | None, total: float, items_data: list[dict], session: AsyncSession) -> Sale:
         sale = Sale(tenant_id=UUID(tenant_id), seller_id=UUID(seller_id) if seller_id else None, total=total)
-        
+
         items = []
         for item in items_data:
             items.append(SaleItem(
                 tenant_id=UUID(tenant_id),
                 product_id=item["product_id"],
+                variant_id=item.get("variant_id"),  # F-33: nullable
                 quantity=item["quantity"],
-                unit_price=item["unit_price"]
+                unit_price=item["unit_price"],
             ))
-            
+
         sale.items = items
         session.add(sale)
         await session.flush()

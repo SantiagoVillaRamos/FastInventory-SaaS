@@ -172,6 +172,8 @@ function CategoriesTab({ isAdmin }) {
 // ══════════════════════════════════════════════════════════════════════════════
 // ── TAB: Productos ────────────────────────────────────────────────────────────
 // ══════════════════════════════════════════════════════════════════════════════
+const EMPTY_VARIANT = () => ({ name: '', sku: '', price: '', stock: '0' });
+
 function ProductsTab({ isAdmin }) {
   const [products, setProducts]     = useState([]);
   const [categories, setCategories] = useState([]);
@@ -179,7 +181,8 @@ function ProductsTab({ isAdmin }) {
   const [loading, setLoading]       = useState(true);
   const [modal, setModal]           = useState(null);
   const [selected, setSelected]     = useState(null);
-  const [form, setForm]             = useState({ name: '', price: '', stock: '', unit: 'unidad', category_id: '' });
+  const [form, setForm]             = useState({ name: '', price: '0', stock: '0', unit: 'unidad', category_id: '', has_variants: false });
+  const [variants, setVariants]     = useState([EMPTY_VARIANT()]);
   const [saving, setSaving]         = useState(false);
   const [error, setError]           = useState('');
 
@@ -201,24 +204,48 @@ function ProductsTab({ isAdmin }) {
   const filtered = products.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()));
 
   const openCreate = () => {
-    setForm({ name: '', price: '', stock: '', unit: 'unidad', category_id: categories[0]?.id || '' });
+    setForm({ name: '', price: '0', stock: '0', unit: 'unidad', category_id: categories[0]?.id || '', has_variants: false });
+    setVariants([EMPTY_VARIANT()]);
     setSelected(null);
     setModal('create');
   };
-  const openEdit   = (p) => {
-    setForm({ name: p.name, price: p.price, stock: p.stock, unit: p.unit || 'unidad', category_id: p.category_id });
+  const openEdit = (p) => {
+    setForm({ name: p.name, price: p.price, stock: p.stock, unit: p.unit || 'unidad', category_id: p.category_id, has_variants: p.has_variants || false });
+    setVariants(p.variants?.length ? p.variants.map(v => ({ name: v.name, sku: v.sku || '', price: String(v.price), stock: String(v.stock) })) : [EMPTY_VARIANT()]);
     setSelected(p);
     setModal('edit');
   };
   const openDelete = (p) => { setSelected(p); setModal('delete'); };
   const closeModal = () => { setModal(null); setSelected(null); setError(''); };
 
-  // F28-T14: POST / PATCH producto
+  // Helpers para variantes
+  const handleVariantChange = (idx, field, value) => {
+    setVariants(prev => { const v = [...prev]; v[idx] = { ...v[idx], [field]: value }; return v; });
+  };
+  const addVariant    = () => setVariants(prev => [...prev, EMPTY_VARIANT()]);
+  const removeVariant = (idx) => setVariants(prev => prev.filter((_, i) => i !== idx));
+
+  // F28-T14 / F-33: POST / PATCH producto (con soporte de variantes)
   const handleSave = async (e) => {
     e.preventDefault();
     setSaving(true);
     setError('');
-    const payload = { ...form, price: parseFloat(form.price), stock: parseInt(form.stock, 10), category_id: form.category_id };
+    const payload = {
+      name: form.name,
+      price: parseFloat(form.price) || 0,
+      stock: form.has_variants ? 0 : parseInt(form.stock, 10),
+      unit: form.unit,
+      category_id: form.category_id,
+      has_variants: form.has_variants,
+    };
+    if (form.has_variants && modal === 'create') {
+      payload.variants = variants.map(v => ({
+        name: v.name,
+        sku: v.sku || null,
+        price: parseFloat(v.price),
+        stock: parseInt(v.stock, 10) || 0,
+      }));
+    }
     try {
       if (modal === 'create') {
         await api.post('/products/', payload);
@@ -273,7 +300,7 @@ function ProductsTab({ isAdmin }) {
               <tr>
                 <th>Nombre</th>
                 <th>Categoría</th>
-                <th>Precio</th>
+                <th>Precio / Variantes</th>
                 <th>Stock</th>
                 <th>Unidad</th>
                 {isAdmin && <th>Acciones</th>}
@@ -282,15 +309,22 @@ function ProductsTab({ isAdmin }) {
             <tbody>
               {filtered.map((p) => (
                 <tr key={p.id}>
-                  <td className="font-medium text-fi-navy">{p.name}</td>
-                  <td>
-                    <span className="fi-badge-success">{p.category_name}</span>
+                  <td className="font-medium text-fi-navy">
+                    {p.name}
+                    {p.has_variants && <span className="ml-2 fi-badge-warning text-xs">🎨 variantes</span>}
                   </td>
-                  <td className="text-fi-muted">{formatCOP(p.price)}</td>
+                  <td><span className="fi-badge-success">{p.category_name}</span></td>
+                  <td className="text-fi-muted">
+                    {p.has_variants
+                      ? <span className="text-xs text-fi-muted">{p.variants?.length || 0} var. / desde {formatCOP(Math.min(...(p.variants?.map(v => v.price) || [0])))}</span>
+                      : formatCOP(p.price)
+                    }
+                  </td>
                   <td>
-                    <span className={p.stock === 0 ? 'fi-badge-danger' : p.stock <= 5 ? 'fi-badge-warning' : 'fi-badge-success'}>
-                      {p.stock}
-                    </span>
+                    {p.has_variants
+                      ? <span className="fi-badge-success">{(p.variants || []).reduce((a, v) => a + v.stock, 0)} total</span>
+                      : <span className={p.stock === 0 ? 'fi-badge-danger' : p.stock <= 5 ? 'fi-badge-warning' : 'fi-badge-success'}>{p.stock}</span>
+                    }
                   </td>
                   <td className="text-fi-muted text-xs">{p.unit}</td>
                   {isAdmin && (
@@ -308,27 +342,49 @@ function ProductsTab({ isAdmin }) {
         )}
       </div>
 
-      {/* Modal Crear/Editar F28-T05/T06/T13 */}
+      {/* Modal Crear/Editar — F28 + F-33 */}
       {(modal === 'create' || modal === 'edit') && (
         <Modal title={modal === 'create' ? 'Nuevo producto' : 'Editar producto'} onClose={closeModal}>
-          <form onSubmit={handleSave} className="space-y-4">
+          <form onSubmit={handleSave} className="space-y-4 max-h-[75vh] overflow-y-auto pr-1">
             {error && <p className="text-red-600 text-sm bg-red-50 p-3 rounded-lg border border-red-200">{error}</p>}
 
             <div>
               <label className="block text-sm font-medium mb-1.5">Nombre *</label>
-              <input required className="fi-input" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Ej: Taladro eléctrico" />
+              <input required className="fi-input" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Ej: Camiseta Polo" />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            {/* F-33: Toggle de variantes */}
+            <div className="flex items-center justify-between p-3 bg-fi-bg rounded-xl border border-fi-border">
               <div>
-                <label className="block text-sm font-medium mb-1.5">Precio *</label>
-                <input required type="number" min="0" step="0.01" className="fi-input" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="0.00" />
+                <p className="text-sm font-medium text-fi-navy">¿Tiene variantes?</p>
+                <p className="text-xs text-fi-muted mt-0.5">Ej: tallas, colores, medidas</p>
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1.5">Stock *</label>
-                <input required type="number" min="0" className="fi-input" value={form.stock} onChange={(e) => setForm({ ...form, stock: e.target.value })} placeholder="0" />
-              </div>
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, has_variants: !form.has_variants })}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  form.has_variants ? 'bg-fi-blue' : 'bg-gray-300'
+                }`}
+              >
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  form.has_variants ? 'translate-x-6' : 'translate-x-1'
+                }`} />
+              </button>
             </div>
+
+            {/* Precio y Stock (solo si NO tiene variantes) */}
+            {!form.has_variants && (
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1.5">Precio *</label>
+                  <input required type="number" min="0" step="0.01" className="fi-input" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="0.00" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1.5">Stock inicial *</label>
+                  <input required type="number" min="0" className="fi-input" value={form.stock} onChange={(e) => setForm({ ...form, stock: e.target.value })} placeholder="0" />
+                </div>
+              </div>
+            )}
 
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -342,7 +398,6 @@ function ProductsTab({ isAdmin }) {
                 </select>
               </div>
               <div>
-                {/* F28-T13: Categoría dinámica */}
                 <label className="block text-sm font-medium mb-1.5">Categoría *</label>
                 <select required className="fi-input" value={form.category_id} onChange={(e) => setForm({ ...form, category_id: e.target.value })}>
                   <option value="">Seleccionar...</option>
@@ -352,6 +407,46 @@ function ProductsTab({ isAdmin }) {
                 </select>
               </div>
             </div>
+
+            {/* F-33: Sección de variantes (solo al crear con has_variants) */}
+            {form.has_variants && modal === 'create' && (
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <label className="text-sm font-semibold text-fi-navy">Variantes *</label>
+                  <button type="button" onClick={addVariant} className="text-fi-blue text-sm hover:underline">+ Agregar</button>
+                </div>
+                <div className="space-y-3">
+                  {variants.map((v, idx) => (
+                    <div key={idx} className="grid grid-cols-12 gap-2 items-end p-3 bg-fi-bg rounded-xl border border-fi-border">
+                      <div className="col-span-4">
+                        {idx === 0 && <label className="block text-xs font-medium text-fi-muted mb-1">Nombre *</label>}
+                        <input required className="fi-input text-sm" placeholder="Ej: Rojo - M" value={v.name} onChange={(e) => handleVariantChange(idx, 'name', e.target.value)} />
+                      </div>
+                      <div className="col-span-3">
+                        {idx === 0 && <label className="block text-xs font-medium text-fi-muted mb-1">Precio *</label>}
+                        <input required type="number" min="0.01" step="0.01" className="fi-input text-sm" placeholder="0" value={v.price} onChange={(e) => handleVariantChange(idx, 'price', e.target.value)} />
+                      </div>
+                      <div className="col-span-2">
+                        {idx === 0 && <label className="block text-xs font-medium text-fi-muted mb-1">Stock</label>}
+                        <input type="number" min="0" className="fi-input text-sm" placeholder="0" value={v.stock} onChange={(e) => handleVariantChange(idx, 'stock', e.target.value)} />
+                      </div>
+                      <div className="col-span-2">
+                        {idx === 0 && <label className="block text-xs font-medium text-fi-muted mb-1">SKU</label>}
+                        <input className="fi-input text-sm" placeholder="Opcional" value={v.sku} onChange={(e) => handleVariantChange(idx, 'sku', e.target.value)} />
+                      </div>
+                      <div className="col-span-1 flex items-end pb-0.5 justify-center">
+                        {variants.length > 1 && (
+                          <button type="button" onClick={() => removeVariant(idx)} className="text-red-400 hover:text-red-600 text-lg font-bold">×</button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {form.has_variants && modal === 'edit' && (
+                  <p className="text-xs text-fi-muted mt-2">Para gestionar variantes de un producto existente, usa la sección de Compras para reponer stock por variante.</p>
+                )}
+              </div>
+            )}
 
             <div className="flex gap-3 justify-end pt-2">
               <button type="button" onClick={closeModal} className="fi-btn-secondary w-auto">Cancelar</button>
