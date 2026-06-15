@@ -1,1 +1,0 @@
-/* Catalog Module JS — placeholder */

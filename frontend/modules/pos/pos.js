@@ -1,1 +1,0 @@
-/* POS Module JS — placeholder */

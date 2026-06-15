@@ -52,3 +52,5 @@ architecture/
 docs/
 # Excepción: el logo sí sube porque lo usa el README.md
 !docs/logo.png
+
+frontend_legacy/
