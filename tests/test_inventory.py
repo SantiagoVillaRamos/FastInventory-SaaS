@@ -18,7 +18,7 @@ class TestCategories:
             json={"name": "Electricidad", "description": "Material eléctrico"},
             headers=tenant_a["headers"],
         )
-        assert resp.status_code == 200
+        assert resp.status_code == 201
         data = resp.json()
         assert data["name"] == "Electricidad"
         assert data["tenant_id"] == tenant_a["tenant"]["id"]
@@ -58,7 +58,7 @@ class TestProducts:
             },
             headers=tenant_a["headers"],
         )
-        assert resp.status_code == 200
+        assert resp.status_code == 201
         data = resp.json()
         assert data["name"] == "Tornillo 1/4"
         assert data["stock"] == 1000
@@ -104,9 +104,12 @@ class TestSales:
             json={"items": [{"product_id": product_id, "quantity": 3}]},
             headers=tenant_a["headers"],
         )
-        assert resp.status_code == 200
+        assert resp.status_code == 201
         sale = resp.json()
-        assert sale["total"] == 30.0  # 10.0 * 3
+        assert sale["subtotal"] == 30.0
+        assert sale["tax_amount"] == 5.7
+        assert sale["retention_amount"] == 0.0
+        assert sale["total"] == 35.7
         assert len(sale["items"]) == 1
 
     async def test_sale_insufficient_stock_fails(self, client: AsyncClient, tenant_a: dict):
@@ -144,3 +147,96 @@ class TestSales:
         resp = await client.get("/sales/", headers=tenant_a["headers"])
         assert resp.status_code == 200
         assert isinstance(resp.json(), list)
+
+
+@pytest.mark.asyncio
+class TestTaxEngine:
+    """F-34: Motor de impuestos, exenciones e IVA y retenciones en Tenant."""
+
+    async def test_tax_exempt_product_excludes_vat(self, client: AsyncClient, tenant_a: dict):
+        """Un producto marcado como exento no debe sumar IVA al total."""
+        # 1. Crear categoría
+        cat_resp = await client.post(
+            "/categories/",
+            json={"name": "Alimentos"},
+            headers=tenant_a["headers"],
+        )
+        cat_id = cat_resp.json()["id"]
+
+        # 2. Crear producto exento de impuestos
+        prod_resp = await client.post(
+            "/products/",
+            json={
+                "name": "Pan Integral",
+                "price": 5.0,
+                "stock": 100,
+                "category_id": cat_id,
+                "is_tax_exempt": True,
+            },
+            headers=tenant_a["headers"],
+        )
+        prod_id = prod_resp.json()["id"]
+
+        # 3. Realizar venta del producto exento
+        resp = await client.post(
+            "/sales/",
+            json={"items": [{"product_id": prod_id, "quantity": 2}]},
+            headers=tenant_a["headers"],
+        )
+        assert resp.status_code == 201
+        sale = resp.json()
+        assert sale["subtotal"] == 10.0
+        assert sale["tax_amount"] == 0.0  # Sin IVA
+        assert sale["retention_amount"] == 0.0
+        assert sale["total"] == 10.0
+
+    async def test_tenant_tax_configuration_update(self, client: AsyncClient, tenant_a: dict):
+        """Actualizar tasas del tenant y verificar los cálculos de venta."""
+        # 1. Cambiar IVA a 10% y Retención a 4%
+        patch_resp = await client.patch(
+            "/tenants/me",
+            json={"default_vat_rate": 0.10, "default_retention_rate": 0.04},
+            headers=tenant_a["headers"],
+        )
+        assert patch_resp.status_code == 200
+        tenant_data = patch_resp.json()
+        assert tenant_data["default_vat_rate"] == 0.10
+        assert tenant_data["default_retention_rate"] == 0.04
+
+        # 2. Crear producto normal (no exento)
+        cat_resp = await client.post(
+            "/categories/",
+            json={"name": "Ferretería Config"},
+            headers=tenant_a["headers"],
+        )
+        cat_id = cat_resp.json()["id"]
+
+        prod_resp = await client.post(
+            "/products/",
+            json={
+                "name": "Tubo PVC",
+                "price": 100.0,
+                "stock": 10,
+                "category_id": cat_id,
+                "is_tax_exempt": False,
+            },
+            headers=tenant_a["headers"],
+        )
+        prod_id = prod_resp.json()["id"]
+
+        # 3. Realizar venta
+        # Subtotal: 100.0
+        # IVA (10%): +10.0
+        # Retención (4%): -4.0
+        # Total: 100.0 + 10.0 - 4.0 = 106.0
+        resp = await client.post(
+            "/sales/",
+            json={"items": [{"product_id": prod_id, "quantity": 1}]},
+            headers=tenant_a["headers"],
+        )
+        assert resp.status_code == 201
+        sale = resp.json()
+        assert sale["subtotal"] == 100.0
+        assert sale["tax_amount"] == 10.0
+        assert sale["retention_amount"] == 4.0
+        assert sale["total"] == 106.0

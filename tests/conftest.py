@@ -54,6 +54,13 @@ class FakeRedis:
         for k in keys:
             self._store.pop(k, None)
 
+    async def scan(self, cursor: int = 0, match: str | None = None, count: int = 10) -> tuple[int, list[str]]:
+        import fnmatch
+        keys = list(self._store.keys())
+        if match:
+            keys = fnmatch.filter(keys, match)
+        return 0, keys
+
     async def ping(self) -> bool:
         return True
 
@@ -132,7 +139,7 @@ async def tenant_a(client: AsyncClient) -> dict:
         "admin_password": "Password123!",
     }
     resp = await client.post("/auth/register", json=payload)
-    assert resp.status_code == 200, f"Error al registrar Tenant A: {resp.text}"
+    assert resp.status_code == 201, f"Error al registrar Tenant A: {resp.text}"
     tenant_data = resp.json()
 
     # Login para obtener JWT
@@ -164,7 +171,7 @@ async def tenant_b(client: AsyncClient) -> dict:
         "admin_password": "Password456!",
     }
     resp = await client.post("/auth/register", json=payload)
-    assert resp.status_code == 200, f"Error al registrar Tenant B: {resp.text}"
+    assert resp.status_code == 201, f"Error al registrar Tenant B: {resp.text}"
     tenant_data = resp.json()
 
     login_resp = await client.post(

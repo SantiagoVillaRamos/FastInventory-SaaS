@@ -40,6 +40,7 @@ class ProductCreate(BaseModel):
     stock: int = Field(0, ge=0)
     unit: str = Field("unidad", max_length=20)
     has_variants: bool = False
+    is_tax_exempt: bool = False
     # F-33: Lista opcional de variantes al crear el producto
     variants: list[VariantCreate] | None = None
 
@@ -51,6 +52,7 @@ class ProductUpdate(BaseModel):
     stock: int | None = Field(None, ge=0)
     unit: str | None = Field(None, max_length=20)
     has_variants: bool | None = None
+    is_tax_exempt: bool | None = None
 
 
 class ProductRead(BaseModel):
@@ -62,6 +64,7 @@ class ProductRead(BaseModel):
     stock: int
     unit: str
     has_variants: bool
+    is_tax_exempt: bool
     created_at: datetime
     # F-33: Lista de variantes anidadas (vacía si el producto no tiene variantes)
     variants: list[VariantRead] = []

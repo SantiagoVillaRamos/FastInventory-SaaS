@@ -181,7 +181,7 @@ function ProductsTab({ isAdmin }) {
   const [loading, setLoading]       = useState(true);
   const [modal, setModal]           = useState(null);
   const [selected, setSelected]     = useState(null);
-  const [form, setForm]             = useState({ name: '', price: '0', stock: '0', unit: 'unidad', category_id: '', has_variants: false });
+  const [form, setForm]             = useState({ name: '', price: '0', stock: '0', unit: 'unidad', category_id: '', has_variants: false, is_tax_exempt: false });
   const [variants, setVariants]     = useState([EMPTY_VARIANT()]);
   const [saving, setSaving]         = useState(false);
   const [error, setError]           = useState('');
@@ -204,13 +204,13 @@ function ProductsTab({ isAdmin }) {
   const filtered = products.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()));
 
   const openCreate = () => {
-    setForm({ name: '', price: '0', stock: '0', unit: 'unidad', category_id: categories[0]?.id || '', has_variants: false });
+    setForm({ name: '', price: '0', stock: '0', unit: 'unidad', category_id: categories[0]?.id || '', has_variants: false, is_tax_exempt: false });
     setVariants([EMPTY_VARIANT()]);
     setSelected(null);
     setModal('create');
   };
   const openEdit = (p) => {
-    setForm({ name: p.name, price: p.price, stock: p.stock, unit: p.unit || 'unidad', category_id: p.category_id, has_variants: p.has_variants || false });
+    setForm({ name: p.name, price: p.price, stock: p.stock, unit: p.unit || 'unidad', category_id: p.category_id, has_variants: p.has_variants || false, is_tax_exempt: p.is_tax_exempt || false });
     setVariants(p.variants?.length ? p.variants.map(v => ({ name: v.name, sku: v.sku || '', price: String(v.price), stock: String(v.stock) })) : [EMPTY_VARIANT()]);
     setSelected(p);
     setModal('edit');
@@ -237,6 +237,7 @@ function ProductsTab({ isAdmin }) {
       unit: form.unit,
       category_id: form.category_id,
       has_variants: form.has_variants,
+      is_tax_exempt: form.is_tax_exempt,
     };
     if (form.has_variants && modal === 'create') {
       payload.variants = variants.map(v => ({
@@ -312,6 +313,7 @@ function ProductsTab({ isAdmin }) {
                   <td className="font-medium text-fi-navy">
                     {p.name}
                     {p.has_variants && <span className="ml-2 fi-badge-warning text-xs">🎨 variantes</span>}
+                    {p.is_tax_exempt && <span className="ml-2 bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-xs font-semibold">exento</span>}
                   </td>
                   <td><span className="fi-badge-success">{p.category_name}</span></td>
                   <td className="text-fi-muted">
@@ -368,6 +370,25 @@ function ProductsTab({ isAdmin }) {
               >
                 <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
                   form.has_variants ? 'translate-x-6' : 'translate-x-1'
+                }`} />
+              </button>
+            </div>
+
+            {/* F-34: Toggle de exención de impuestos */}
+            <div className="flex items-center justify-between p-3 bg-fi-bg rounded-xl border border-fi-border">
+              <div>
+                <p className="text-sm font-medium text-fi-navy">¿Exento de Impuestos (IVA)?</p>
+                <p className="text-xs text-fi-muted mt-0.5">Activa si este producto no cobra IVA</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, is_tax_exempt: !form.is_tax_exempt })}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  form.is_tax_exempt ? 'bg-fi-blue' : 'bg-gray-300'
+                }`}
+              >
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  form.is_tax_exempt ? 'translate-x-6' : 'translate-x-1'
                 }`} />
               </button>
             </div>

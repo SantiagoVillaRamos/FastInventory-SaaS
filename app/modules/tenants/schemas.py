@@ -29,6 +29,8 @@ class TenantRead(BaseModel):
     slug: str
     plan: PlanEnum
     is_active: bool
+    default_vat_rate: float
+    default_retention_rate: float
     created_at: datetime
 
     model_config = {"from_attributes": True}
@@ -37,3 +39,5 @@ class TenantRead(BaseModel):
 class TenantUpdate(BaseModel):
     name: str | None = None
     is_active: bool | None = None
+    default_vat_rate: float | None = Field(None, ge=0.0, le=1.0)
+    default_retention_rate: float | None = Field(None, ge=0.0, le=1.0)

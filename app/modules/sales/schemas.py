@@ -26,6 +26,9 @@ class SaleRead(BaseModel):
     id: uuid.UUID
     tenant_id: uuid.UUID
     seller_id: uuid.UUID | None
+    subtotal: float
+    tax_amount: float
+    retention_amount: float
     total: float
     created_at: datetime
     items: list[SaleItemRead] = []

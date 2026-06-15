@@ -10,6 +10,7 @@ const NAV_ITEMS = [
   { to: '/pos',       icon: '🛒', label: 'Punto de Venta', roles: null },
   { to: '/purchases', icon: '📥', label: 'Compras',        roles: ['admin'] },
   { to: '/reports',   icon: '📈', label: 'Reportes',       roles: ['admin'] },
+  { to: '/settings',  icon: '⚙️', label: 'Ajustes',        roles: ['admin'] },
   { to: '/team',      icon: '👥', label: 'Equipo',         roles: ['admin'] },
 ];
 

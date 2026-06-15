@@ -18,7 +18,7 @@ class TestRegister:
             "admin_name": "Admin Test",
             "admin_password": "Segura123!",
         })
-        assert resp.status_code == 200
+        assert resp.status_code == 201
         data = resp.json()
         assert data["name"] == "Tienda Test"
         assert data["slug"] == "tienda-test-register"
@@ -35,7 +35,7 @@ class TestRegister:
             "admin_password": "Segura123!",
         }
         resp1 = await client.post("/auth/register", json=payload)
-        assert resp1.status_code == 200
+        assert resp1.status_code == 201
 
         # Segundo registro con mismo slug
         payload["admin_email"] = "dup2@test.com"

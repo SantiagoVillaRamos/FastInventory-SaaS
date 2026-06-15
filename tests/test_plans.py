@@ -58,7 +58,7 @@ class TestPlanLimits:
             },
             headers=tenant_a["headers"],
         )
-        assert resp1.status_code == 200
+        assert resp1.status_code == 201
 
         # Crear segundo usuario adicional (usuario #3) → debería fallar
         resp2 = await client.post(

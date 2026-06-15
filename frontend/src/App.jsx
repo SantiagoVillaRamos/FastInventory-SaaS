@@ -25,6 +25,9 @@ import Reports from './pages/Reports';
 // ── F-32: Compras y Reposición
 import Purchases from './pages/Purchases';
 
+// ── F-34: Ajustes e Impuestos
+import Settings from './pages/Settings';
+
 // Placeholder para módulos aún no construidos
 const ComingSoon = ({ name }) => (
   <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
@@ -50,6 +53,7 @@ export default function App() {
             <Route path="/pos"       element={<POS />} />
             <Route path="/purchases" element={<Purchases />} />
             <Route path="/reports"   element={<Reports />} />
+            <Route path="/settings"  element={<Settings />} />
             <Route path="/team"      element={<ComingSoon name="Equipo" />} />
           </Route>
         </Routes>

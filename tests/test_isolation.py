@@ -21,7 +21,7 @@ class TestMultiTenantIsolation:
             json={"name": "Pinturas Exclusivas", "description": "Solo para Alpha"},
             headers=tenant_a["headers"],
         )
-        assert resp_create.status_code == 200
+        assert resp_create.status_code == 201
         cat_a_id = resp_create.json()["id"]
 
         # Tenant B lista sus categorías → NO debe ver "Pinturas Exclusivas"
@@ -48,7 +48,7 @@ class TestMultiTenantIsolation:
             json={"name": "Martillo Secreto", "price": 25.0, "stock": 10, "category_id": cat_id},
             headers=tenant_a["headers"],
         )
-        assert prod_resp.status_code == 200
+        assert prod_resp.status_code == 201
         prod_a_id = prod_resp.json()["id"]
 
         # Tenant B lista productos → NO debe ver "Martillo Secreto"

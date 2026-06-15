@@ -26,6 +26,8 @@ class Product(Base):
     unit: Mapped[str] = mapped_column(String(20), default="unidad", nullable=False)
     # F-33: Si True, el stock y precio se gestionan a nivel de variante
     has_variants: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false", nullable=False)
+    # F-34: Si True, este producto no suma IVA en las ventas
+    is_tax_exempt: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false", nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(UTC)
     )

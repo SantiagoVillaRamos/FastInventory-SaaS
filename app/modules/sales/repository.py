@@ -10,8 +10,24 @@ from app.modules.sales.models import Sale, SaleItem
 class SaleRepository:
     
     @staticmethod
-    async def create_with_items(tenant_id: str, seller_id: str | None, total: float, items_data: list[dict], session: AsyncSession) -> Sale:
-        sale = Sale(tenant_id=UUID(tenant_id), seller_id=UUID(seller_id) if seller_id else None, total=total)
+    async def create_with_items(
+        tenant_id: str,
+        seller_id: str | None,
+        subtotal: float,
+        tax_amount: float,
+        retention_amount: float,
+        total: float,
+        items_data: list[dict],
+        session: AsyncSession
+    ) -> Sale:
+        sale = Sale(
+            tenant_id=UUID(tenant_id),
+            seller_id=UUID(seller_id) if seller_id else None,
+            subtotal=subtotal,
+            tax_amount=tax_amount,
+            retention_amount=retention_amount,
+            total=total
+        )
 
         items = []
         for item in items_data:

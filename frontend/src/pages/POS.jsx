@@ -7,7 +7,8 @@ import api from '../api/axios';
 const formatCOP = (v) =>
   Number(v || 0).toLocaleString('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
 
-const IVA = 0.19;
+// IVA por defecto si no carga de la base de datos
+const DEFAULT_IVA = 0.19;
 
 // ── Modal de Éxito ─────────────────────────────────────────────────────────
 function SuccessModal({ total, itemCount, onClose }) {
@@ -152,6 +153,7 @@ export default function POS() {
   const [checking, setChecking]     = useState(false);
   const [success, setSuccess]       = useState(null);
   const [variantModal, setVariantModal] = useState(null); // F-33: producto con variantes pendiente
+  const [taxConfig, setTaxConfig]   = useState({ vatRate: DEFAULT_IVA, retentionRate: 0.00 });
 
   // F30-T04: Cargar productos con stock disponible
   const loadProducts = useCallback(async () => {
@@ -167,7 +169,22 @@ export default function POS() {
     finally { setLoading(false); }
   }, []);
 
-  useEffect(() => { loadProducts(); }, [loadProducts]);
+  const loadTaxConfig = useCallback(async () => {
+    try {
+      const res = await api.get('/tenants/me');
+      setTaxConfig({
+        vatRate: res.data.default_vat_rate,
+        retentionRate: res.data.default_retention_rate,
+      });
+    } catch {
+      // Usar valores por defecto si falla
+    }
+  }, []);
+
+  useEffect(() => {
+    loadProducts();
+    loadTaxConfig();
+  }, [loadProducts, loadTaxConfig]);
 
   // Productos filtrados por búsqueda
   const filtered = products.filter((p) =>
@@ -205,6 +222,7 @@ export default function POS() {
         price: itemPrice,
         stock: itemStock,
         quantity: 1,
+        is_tax_exempt: product.is_tax_exempt || false,
       }];
     });
   };
@@ -218,10 +236,14 @@ export default function POS() {
   );
   const removeFromCart = (id) => setCartItems((prev) => prev.filter((i) => i.id !== id));
 
-  // F30-T08: Cálculos del resumen
+  // F30-T08 / F-34: Cálculos del resumen
   const subtotal = cartItems.reduce((acc, i) => acc + i.price * i.quantity, 0);
-  const iva      = subtotal * IVA;
-  const total    = subtotal + iva;
+  const iva      = cartItems.reduce((acc, i) => {
+    if (i.is_tax_exempt) return acc;
+    return acc + (i.price * i.quantity) * taxConfig.vatRate;
+  }, 0);
+  const retention = subtotal * taxConfig.retentionRate;
+  const total    = subtotal + iva - retention;
 
   // F30-T09 / F-33: checkout() — POST /sales/ con variant_id si aplica
   const checkout = async () => {
@@ -326,9 +348,15 @@ export default function POS() {
                   <span>{formatCOP(subtotal)}</span>
                 </div>
                 <div className="flex justify-between text-sm text-fi-muted">
-                  <span>IVA (19%)</span>
+                  <span>IVA ({(taxConfig.vatRate * 100).toFixed(0)}%)</span>
                   <span>{formatCOP(iva)}</span>
                 </div>
+                {taxConfig.retentionRate > 0 && (
+                  <div className="flex justify-between text-sm text-red-600">
+                    <span>Retención ({(taxConfig.retentionRate * 100).toFixed(1)}%)</span>
+                    <span>-{formatCOP(retention)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between font-bold text-fi-navy text-base border-t border-fi-border pt-2 mt-1">
                   <span>Total</span>
                   <span>{formatCOP(total)}</span>
