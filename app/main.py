@@ -88,3 +88,8 @@ app.include_router(reports_router, prefix="/reports")
 from app.modules.admin.router import router as admin_router
 
 app.include_router(admin_router, prefix="/admin")
+
+# F-32: Módulo de Compras y Reposición de Inventario
+from app.modules.purchases.router import router as purchases_router
+
+app.include_router(purchases_router, prefix="/purchases")
