@@ -51,3 +51,65 @@ async def daily_pdf(
         media_type="application/pdf",
         headers={"Content-Disposition": "attachment; filename=reporte-diario.pdf"}
     )
+
+
+# ── F-36: Exportación Avanzada ────────────────────────────────────────────────
+
+from app.modules.reports.export_service import ExportService
+
+
+@router.get("/export/sales/csv", tags=["Reports"])
+async def export_sales_csv(
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_tenant),
+):
+    """Exporta el historial de ventas completo en CSV."""
+    csv_str = await ExportService.export_sales_csv(current_user["id"], db)
+    return Response(
+        content=csv_str,
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=ventas-reporte.csv"},
+    )
+
+
+@router.get("/export/sales/xlsx", tags=["Reports"])
+async def export_sales_xlsx(
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_tenant),
+):
+    """Exporta el historial de ventas completo en Excel XLSX."""
+    xlsx_bytes = await ExportService.export_sales_xlsx(current_user["id"], db)
+    return Response(
+        content=xlsx_bytes,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": "attachment; filename=ventas-reporte.xlsx"},
+    )
+
+
+@router.get("/export/products/csv", tags=["Reports"])
+async def export_products_csv(
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_tenant),
+):
+    """Exporta el catálogo de productos/inventario en CSV."""
+    csv_str = await ExportService.export_products_csv(current_user["id"], db)
+    return Response(
+        content=csv_str,
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=productos-inventario.csv"},
+    )
+
+
+@router.get("/export/products/xlsx", tags=["Reports"])
+async def export_products_xlsx(
+    db: AsyncSession = Depends(get_db),
+    current_user: dict = Depends(get_current_tenant),
+):
+    """Exporta el catálogo de productos/inventario en Excel XLSX."""
+    xlsx_bytes = await ExportService.export_products_xlsx(current_user["id"], db)
+    return Response(
+        content=xlsx_bytes,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": "attachment; filename=productos-inventario.xlsx"},
+    )
+

@@ -200,6 +200,27 @@ function ProductsTab({ isAdmin }) {
 
   useEffect(() => { load(); }, [load]);
 
+  const handleExport = async (format) => {
+    try {
+      const response = await api.get(`/reports/export/products/${format}`, {
+        responseType: 'blob',
+      });
+      const blob = new Blob([response.data], {
+        type: format === 'csv' ? 'text/csv' : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `productos-inventario.${format}`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      console.error('Error al exportar productos:', err);
+      alert('No se pudo exportar el catálogo de productos.');
+    }
+  };
+
   // F28-T12: Búsqueda por nombre
   const filtered = products.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()));
 
@@ -274,20 +295,29 @@ function ProductsTab({ isAdmin }) {
   return (
     <div className="space-y-4">
       {/* Toolbar F28-T04 */}
-      <div className="flex flex-col sm:flex-row gap-3 justify-between">
-        <input
-          type="search"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Buscar producto por nombre..."
-          className="fi-input max-w-xs"
-        />
+      <div className="flex flex-col sm:flex-row gap-3 justify-between items-center">
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          <input
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Buscar producto por nombre..."
+            className="fi-input max-w-xs"
+          />
+          <button onClick={() => handleExport('csv')} className="fi-btn-secondary w-auto px-3 py-2 text-sm flex items-center gap-1" title="Exportar a CSV">
+            📥 CSV
+          </button>
+          <button onClick={() => handleExport('xlsx')} className="fi-btn-secondary w-auto px-3 py-2 text-sm flex items-center gap-1" title="Exportar a Excel">
+            📥 Excel
+          </button>
+        </div>
         {isAdmin && (
           <button onClick={openCreate} className="fi-btn-primary w-auto px-5 py-2 text-sm">
             + Nuevo producto
           </button>
         )}
       </div>
+
 
       {/* Tabla F28-T03 */}
       <div className="fi-card overflow-hidden">
