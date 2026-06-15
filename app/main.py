@@ -93,3 +93,8 @@ app.include_router(admin_router, prefix="/admin")
 from app.modules.purchases.router import router as purchases_router
 
 app.include_router(purchases_router, prefix="/purchases")
+
+# F-35: Módulo Multi-Sucursal (Branches)
+from app.modules.branches.router import router as branches_router
+
+app.include_router(branches_router, prefix="/branches")

@@ -47,7 +47,16 @@ class TenantService:
             hashed_password=hash_password(data.admin_password)
         )
         session.add(admin_user)
-        # 5. Todo el commit exitoso al final
+
+        # 5. F-35: Crear sucursal "Principal" por defecto para el tenant
+        from app.modules.branches.repository import BranchRepository
+        await BranchRepository.create(
+            tenant.id,
+            {"name": "Principal", "address": None},
+            session
+        )
+
+        # 6. Todo el commit exitoso al final
         await session.commit()
             
         return TenantRead.model_validate(tenant)

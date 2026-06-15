@@ -11,6 +11,8 @@ class SaleItemInput(BaseModel):
     quantity: int = Field(..., gt=0)
 
 class SaleCreate(BaseModel):
+    # F-35: Sucursal donde se realiza la venta (opcional, usa stock global si no se provee)
+    branch_id: uuid.UUID | None = None
     items: list[SaleItemInput] = Field(..., min_length=1)
 
 class SaleItemRead(BaseModel):
@@ -26,6 +28,7 @@ class SaleRead(BaseModel):
     id: uuid.UUID
     tenant_id: uuid.UUID
     seller_id: uuid.UUID | None
+    branch_id: uuid.UUID | None = None
     subtotal: float
     tax_amount: float
     retention_amount: float

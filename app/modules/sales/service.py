@@ -13,9 +13,10 @@ class SaleService:
     @staticmethod
     async def create_sale(tenant_id: str, seller_id: str | None, data: SaleCreate, session: AsyncSession, cache: aioredis.Redis) -> SaleRead:
         """
-        QAS-01 / F-33 / F-34: Procesa una venta completa. Si el ítem trae variant_id,
-        descuenta stock de la variante y usa su precio. Sin variant_id, opera sobre el producto base.
-        Calcula dinámicamente el IVA y las retenciones del tenant.
+        QAS-01 / F-33 / F-34 / F-35: Procesa una venta completa.
+        - Si el ítem trae variant_id, descuenta stock de la variante.
+        - Calcula IVA dinámico y retenciones del tenant.
+        - Si data.branch_id está presente, el stock se gestiona por sucursal.
         """
         from app.modules.tenants.repository import TenantRepository
         tenant = await TenantRepository.get_by_id(tenant_id, session)
@@ -24,6 +25,17 @@ class SaleService:
 
         vat_rate = float(tenant.default_vat_rate)
         retention_rate = float(tenant.default_retention_rate)
+
+        # F-35: Validar sucursal si se provee branch_id
+        branch_id = data.branch_id
+        if branch_id:
+            from app.modules.branches.repository import BranchRepository
+            branch = await BranchRepository.get_by_id(str(branch_id), tenant_id, session)
+            if not branch or not branch.is_active:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Sucursal no encontrada o inactiva"
+                )
 
         subtotal_sale = 0.0
         tax_sale = 0.0
@@ -37,7 +49,6 @@ class SaleService:
 
             # F-33: Determinar precio y validar stock según si hay variante o no
             if item_input.variant_id:
-                # Buscar la variante específica
                 from sqlalchemy import select
                 from app.modules.products.models import ProductVariant
                 stmt = select(ProductVariant).where(
@@ -53,17 +64,41 @@ class SaleService:
                     raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Stock insuficiente para variante '{variant.name}'. Disponible: {variant.stock}, Requerido: {item_input.quantity}")
 
                 unit_price = float(variant.price)
+            elif branch_id:
+                # F-35: Validar stock en la sucursal específica
+                from app.modules.branches.repository import BranchRepository
+                from uuid import UUID
+                stock_entry = await BranchRepository.get_or_create_stock(
+                    UUID(str(branch_id)), item_input.product_id, UUID(tenant_id), session
+                )
+                if stock_entry.stock < item_input.quantity:
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail=f"Stock insuficiente en la sucursal para '{product.name}'. Disponible: {stock_entry.stock}, Requerido: {item_input.quantity}"
+                    )
+                unit_price = float(product.price)
             else:
-                # Producto simple
+                # Producto simple (sin variante, sin sucursal)
                 if product.stock < item_input.quantity:
                     raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Stock insuficiente para '{product.name}'. Disponible: {product.stock}, Requerido: {item_input.quantity}")
                 unit_price = float(product.price)
 
-            # Descuento atómico (variante o producto simple)
-            ok = await ProductRepository.decrement_stock(
-                str(item_input.product_id), tenant_id, item_input.quantity, session,
-                variant_id=item_input.variant_id,
-            )
+            # Descuento atómico según modalidad
+            if item_input.variant_id:
+                ok = await ProductRepository.decrement_stock(
+                    str(item_input.product_id), tenant_id, item_input.quantity, session,
+                    variant_id=item_input.variant_id,
+                )
+            elif branch_id:
+                from app.modules.branches.repository import BranchRepository
+                from uuid import UUID
+                ok = await BranchRepository.decrement_branch_stock(
+                    UUID(str(branch_id)), item_input.product_id, UUID(tenant_id), item_input.quantity, session
+                )
+            else:
+                ok = await ProductRepository.decrement_stock(
+                    str(item_input.product_id), tenant_id, item_input.quantity, session,
+                )
             if not ok:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No se pudo descontar el stock.")
 
@@ -88,6 +123,7 @@ class SaleService:
         sale = await SaleRepository.create_with_items(
             tenant_id=tenant_id,
             seller_id=seller_id,
+            branch_id=str(branch_id) if branch_id else None,
             subtotal=round(subtotal_sale, 2),
             tax_amount=round(tax_sale, 2),
             retention_amount=round(retention_sale, 2),

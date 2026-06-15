@@ -20,6 +20,7 @@ from app.modules.products.models import Product, ProductVariant
 from app.modules.sales.models import Sale, SaleItem
 from app.modules.admin.models import PlanAuditLog
 from app.modules.purchases.models import PurchaseOrder, PurchaseOrderItem
+from app.modules.branches.models import Branch, BranchProductStock
 from app.core.config import settings
 
 config = context.config

@@ -18,11 +18,13 @@ class SaleRepository:
         retention_amount: float,
         total: float,
         items_data: list[dict],
-        session: AsyncSession
+        session: AsyncSession,
+        branch_id: str | None = None,
     ) -> Sale:
         sale = Sale(
             tenant_id=UUID(tenant_id),
             seller_id=UUID(seller_id) if seller_id else None,
+            branch_id=UUID(branch_id) if branch_id else None,
             subtotal=subtotal,
             tax_amount=tax_amount,
             retention_amount=retention_amount,

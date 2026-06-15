@@ -154,6 +154,11 @@ export default function POS() {
   const [success, setSuccess]       = useState(null);
   const [variantModal, setVariantModal] = useState(null); // F-33: producto con variantes pendiente
   const [taxConfig, setTaxConfig]   = useState({ vatRate: DEFAULT_IVA, retentionRate: 0.00 });
+  // F-35: Sucursales
+  const [branches, setBranches]     = useState([]);
+  const [activeBranch, setActiveBranch] = useState(
+    () => sessionStorage.getItem('pos_branch_id') || null
+  );
 
   // F30-T04: Cargar productos con stock disponible
   const loadProducts = useCallback(async () => {
@@ -181,10 +186,26 @@ export default function POS() {
     }
   }, []);
 
+  const loadBranches = useCallback(async () => {
+    try {
+      const res = await api.get('/branches/');
+      setBranches(res.data.filter(b => b.is_active));
+    } catch { /* silencioso */ }
+  }, []);
+
   useEffect(() => {
     loadProducts();
     loadTaxConfig();
-  }, [loadProducts, loadTaxConfig]);
+    loadBranches();
+  }, [loadProducts, loadTaxConfig, loadBranches]);
+
+  // Persistir sucursal activa en sessionStorage
+  const handleBranchChange = (branchId) => {
+    setActiveBranch(branchId || null);
+    if (branchId) sessionStorage.setItem('pos_branch_id', branchId);
+    else sessionStorage.removeItem('pos_branch_id');
+    setCartItems([]); // Limpiar carrito al cambiar sucursal
+  };
 
   // Productos filtrados por búsqueda
   const filtered = products.filter((p) =>
@@ -245,12 +266,13 @@ export default function POS() {
   const retention = subtotal * taxConfig.retentionRate;
   const total    = subtotal + iva - retention;
 
-  // F30-T09 / F-33: checkout() — POST /sales/ con variant_id si aplica
+  // F30-T09 / F-33 / F-35: checkout() — POST /sales/ con variant_id y branch_id si aplican
   const checkout = async () => {
     if (cartItems.length === 0) return;
     setChecking(true);
     try {
       const payload = {
+        ...(activeBranch && { branch_id: activeBranch }),
         items: cartItems.map((i) => ({
           product_id: i.product_id || i.id,
           variant_id: i.variant_id || null,
@@ -276,9 +298,28 @@ export default function POS() {
   return (
     <div className="space-y-6 h-full">
       {/* Encabezado */}
-      <div>
-        <h1 className="text-2xl font-bold text-fi-navy">Punto de Venta</h1>
-        <p className="text-fi-muted text-sm mt-1">Selecciona productos para añadir al carrito</p>
+      <div className="flex items-start justify-between flex-wrap gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-fi-navy">Punto de Venta</h1>
+          <p className="text-fi-muted text-sm mt-1">Selecciona productos para añadir al carrito</p>
+        </div>
+        {/* F-35: Selector de Sucursal */}
+        {branches.length > 0 && (
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-fi-muted">🏪 Sucursal:</span>
+            <select
+              id="pos-branch-selector"
+              value={activeBranch || ''}
+              onChange={(e) => handleBranchChange(e.target.value || null)}
+              className="fi-input !w-auto py-1.5 text-sm font-semibold text-fi-navy"
+            >
+              <option value="">Stock global</option>
+              {branches.map((b) => (
+                <option key={b.id} value={b.id}>{b.name}</option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
 
       {/* F30-T02: Grid principal 2/3 | 1/3 */}

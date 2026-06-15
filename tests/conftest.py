@@ -18,6 +18,7 @@ from app.core.dependencies import get_cache, get_db
 
 # ── Importar TODOS los modelos para que Base.metadata los conozca ────────────
 from app.modules.admin.models import PlanAuditLog  # noqa: F401
+from app.modules.branches.models import Branch, BranchProductStock  # noqa: F401  # F-35
 from app.modules.categories.models import Category  # noqa: F401
 from app.modules.products.models import Product  # noqa: F401
 from app.modules.sales.models import Sale, SaleItem  # noqa: F401
