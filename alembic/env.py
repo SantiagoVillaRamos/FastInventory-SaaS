@@ -19,6 +19,7 @@ from app.modules.categories.models import Category
 from app.modules.products.models import Product
 from app.modules.sales.models import Sale, SaleItem
 from app.modules.admin.models import PlanAuditLog
+from app.modules.purchases.models import PurchaseOrder, PurchaseOrderItem
 from app.core.config import settings
 
 config = context.config

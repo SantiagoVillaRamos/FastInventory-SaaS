@@ -5,11 +5,12 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const NAV_ITEMS = [
-  { to: '/dashboard', icon: '📊', label: 'Dashboard' },
-  { to: '/catalog',   icon: '📦', label: 'Catálogo' },
-  { to: '/pos',       icon: '🛒', label: 'Punto de Venta' },
-  { to: '/reports',   icon: '📈', label: 'Reportes' },
-  { to: '/team',      icon: '👥', label: 'Equipo' },
+  { to: '/dashboard', icon: '📊', label: 'Dashboard',     roles: null },
+  { to: '/catalog',   icon: '📦', label: 'Catálogo',      roles: null },
+  { to: '/pos',       icon: '🛒', label: 'Punto de Venta', roles: null },
+  { to: '/purchases', icon: '📥', label: 'Compras',        roles: ['admin'] },
+  { to: '/reports',   icon: '📈', label: 'Reportes',       roles: ['admin'] },
+  { to: '/team',      icon: '👥', label: 'Equipo',         roles: ['admin'] },
 ];
 
 export default function Layout() {
@@ -43,7 +44,7 @@ export default function Layout() {
 
         {/* Navegación */}
         <nav className="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
-          {NAV_ITEMS.map((item) => (
+          {NAV_ITEMS.filter(item => !item.roles || item.roles.includes(payload?.role)).map((item) => (
             <NavLink
               key={item.to}
               to={item.to}

@@ -101,6 +101,25 @@ class ProductRepository:
         return False
 
     @staticmethod
+    async def increment_stock(product_id: UUID, tenant_id: UUID, quantity: int, session: AsyncSession) -> bool:
+        """F-32: Incremento atómico de stock para reposición de compras.
+
+        Busca el producto validando tenant_id (aislamiento multi-tenant).
+        Si el producto no existe en el tenant, retorna False (→ HTTP 404 en el servicio).
+        """
+        stmt = select(Product).where(
+            Product.id == product_id,
+            Product.tenant_id == tenant_id,
+        )
+        result = await session.execute(stmt)
+        product = result.scalar_one_or_none()
+        if not product:
+            return False
+        product.stock += quantity
+        await session.flush()
+        return True
+
+    @staticmethod
     async def invalidate_cache(tenant_id: str, cache: aioredis.Redis) -> None:
         """Invalida TODA la caché de productos de un tenant (incluyendo búsquedas), eliminando la sub-jerarquía en Redis."""
         try:
